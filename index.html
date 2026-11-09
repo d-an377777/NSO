@@ -57,7 +57,7 @@ header{position:sticky;top:0;z-index:10;background:rgba(11,16,32,.82);backdrop-f
 .stat b{color:var(--fg)}
 @media(max-width:520px){.hstats .wide{display:none}}
 main{padding:12px 12px calc(84px + env(safe-area-inset-bottom));max-width:1180px;margin:0 auto}
-nav{position:fixed;bottom:0;left:0;right:0;z-index:10;background:rgba(16,23,43,.94);backdrop-filter:blur(12px);border-top:1px solid var(--line);display:grid;grid-template-columns:repeat(5,1fr);padding-bottom:env(safe-area-inset-bottom)}
+nav{position:fixed;bottom:0;left:0;right:0;z-index:10;background:rgba(16,23,43,.94);backdrop-filter:blur(12px);border-top:1px solid var(--line);display:grid;grid-template-columns:repeat(6,1fr);padding-bottom:env(safe-area-inset-bottom)}
 nav button{background:none;border:0;border-radius:0;padding:9px 0 8px;color:var(--fg3);font-size:11px;display:flex;flex-direction:column;align-items:center;gap:3px;position:relative}
 nav button svg{width:22px;height:22px}
 nav button.on{color:var(--fg)}
@@ -97,7 +97,8 @@ details summary::before{content:"▸ ";color:var(--fg3)}details[open] summary::b
 @keyframes fx{to{transform:scale(1.9);opacity:0}}
 .emustats{display:flex;gap:6px;flex-wrap:wrap;margin:8px 0}
 .pad{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}
-.pad button{padding:13px 0;font-size:16px;font-weight:600;border-radius:14px}
+.pad button{padding:13px 0;font-size:16px;font-weight:600;border-radius:14px;white-space:nowrap}
+.pad [data-k=soft1],.pad [data-k=soft2]{font-size:14px}
 .pad .okb{background:linear-gradient(135deg,var(--acc),var(--acc2));border:0;color:#fff}
 .fsbar{display:none}
 .screenwrap:fullscreen{border-radius:0;border:0;display:flex}
@@ -128,6 +129,54 @@ details summary::before{content:"▸ ";color:var(--fg3)}details[open] summary::b
 .shots figure{margin:0;background:var(--bg2);border:1px solid var(--line);border-radius:12px;overflow:hidden}
 .shots img{width:100%;display:block;min-height:80px;background:#000;cursor:zoom-in}
 .shots figcaption{font-size:11px;color:var(--fg2);padding:5px 7px}
+/* ═══ tab Cài đặt (giao diện sáng giống upnso) ═══ */
+#p-set{--o:#e8632b;--o2:#fde9df;--c:#fffdf9;--ln:#ece4d8;--tx:#2b2620;--tx2:#7a6f62;color:var(--tx)}
+#p-set .sbox{background:#f6f2ec;border-radius:18px;padding:10px;margin:-2px -2px 12px}
+#p-set .stop{display:flex;align-items:center;gap:8px;margin-bottom:10px}
+#p-set .nsel{background:#fff;border:1px solid var(--ln);border-radius:999px;padding:7px 12px;font-weight:700;color:var(--tx);width:auto}
+#p-set .seg2{flex:1;display:flex;background:#efe9e0;border-radius:12px;padding:3px;gap:3px}
+#p-set .seg2 button{flex:1;border:0;background:transparent;color:var(--tx2);font-weight:600;border-radius:9px;padding:8px}
+#p-set .seg2 button.on{background:#fff;color:var(--tx);box-shadow:0 1px 3px rgba(0,0,0,.08)}
+#p-set .note{background:#fdece4;color:#c2410c;border-radius:12px;padding:9px 12px;font-size:13px;font-weight:600;margin-bottom:10px}
+#p-set .note.ok{background:#e7f6ec;color:#15803d}
+#p-set .scard{background:var(--c);border:1px solid var(--ln);border-radius:16px;padding:12px;margin-bottom:10px}
+#p-set .scard h4{margin:0 0 10px;font-size:15px;color:var(--tx);display:flex;align-items:center;gap:8px}
+#p-set .scard h4 small{margin-left:auto;font-weight:500;color:var(--tx2);font-size:12px}
+#p-set .f3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+#p-set .f2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px 10px}
+@media(max-width:520px){#p-set .f3{grid-template-columns:1fr 1fr}#p-set .f3>.acc-srv{grid-column:1/-1}}
+#p-set label.fl{display:block;font-size:12.5px;font-weight:600;color:var(--tx);margin-bottom:4px}
+#p-set label.fl small{color:var(--tx2);font-weight:500}
+#p-set input,#p-set select{background:#fff;border:1px solid var(--ln);color:var(--tx);border-radius:12px;padding:10px 11px}
+#p-set input:focus,#p-set select:focus{border-color:var(--o)}
+#p-set input.dirty,#p-set select.dirty{border-color:var(--o);background:#fff7f2}
+#p-set .stabs{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-bottom:10px}
+#p-set .stabs button{background:#fff;border:1px solid var(--ln);color:var(--tx);font-weight:600;font-size:13px;padding:9px 4px;border-radius:12px}
+#p-set .stabs button.on{background:var(--o);border-color:var(--o);color:#fff}
+#p-set .tg{display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:1px dashed var(--ln);font-size:13.5px}
+#p-set .tg:last-child{border:0}
+#p-set .tg .grow{min-width:0}
+#p-set .tg select{width:auto;padding:6px 8px;border-radius:10px;font-size:12.5px}
+#p-set .sw{position:relative;width:42px;height:24px;flex:none}
+#p-set .sw input{opacity:0;width:0;height:0;position:absolute}
+#p-set .sw i{position:absolute;inset:0;background:#ddd5ca;border-radius:999px;transition:.15s;cursor:pointer}
+#p-set .sw i::after{content:"";position:absolute;left:3px;top:3px;width:18px;height:18px;border-radius:50%;background:#fff;transition:.15s;box-shadow:0 1px 2px rgba(0,0,0,.2)}
+#p-set .sw input:checked+i{background:var(--o)}
+#p-set .sw input:checked+i::after{transform:translateX(18px)}
+#p-set .sw.dirty i{outline:2px solid #fdba74;outline-offset:1px}
+#p-set .sbtn{background:#fff;border:1px solid var(--ln);color:var(--tx);font-weight:600;border-radius:12px;padding:9px 12px}
+#p-set .sbtn.o{background:var(--o);border-color:var(--o);color:#fff}
+#p-set .sbtn.g{background:#16a34a;border-color:#16a34a;color:#fff}
+#p-set .sbtn.r{background:#fff;border-color:#fecaca;color:#dc2626}
+#p-set .hint{font-size:12px;color:var(--tx2);margin-top:6px}
+#p-set .gform{border:1px dashed #f3c9b3;border-radius:14px;padding:10px;background:#fffaf6;margin-top:8px}
+#p-set .gform .fi{margin-bottom:9px}
+#p-set .gform .chk{display:flex;flex-wrap:wrap;gap:6px}
+#p-set .gform .chk label{display:flex;align-items:center;gap:5px;background:#fff;border:1px solid var(--ln);border-radius:10px;padding:6px 9px;font-size:13px}
+#p-set .gform .chk input{width:auto}
+#p-set #sbody{padding-bottom:6px}
+#p-set .sbar button{white-space:nowrap;font-size:13.5px;padding:11px 6px}
+#p-set .sbar{position:sticky;bottom:calc(66px + env(safe-area-inset-bottom));display:grid;grid-template-columns:1.6fr 1fr 1fr;gap:8px;padding:10px;margin:0 -2px;background:rgba(246,242,236,.96);border-radius:16px;border:1px solid var(--ln);z-index:4}
 /* sheet */
 .sheet{position:fixed;inset:0;z-index:30;background:rgba(5,8,18,.7);backdrop-filter:blur(4px);display:none;align-items:flex-end;justify-content:center}
 .sheet.on{display:flex}
@@ -175,6 +224,7 @@ details summary::before{content:"▸ ";color:var(--fg3)}details[open] summary::b
       <button class="sm" data-cmd="/boss">🐉 Săn boss</button>
       <button class="sm" data-cmd="/ngu">😴 Ngủ/thức màn hình</button>
       <button class="sm" data-cmd="/anh *">📷 Ảnh tất cả nick</button>
+      <button class="sm" data-cmd="/mojar">📦 Mở jar + Start</button>
     </div>
     <div class="ngrid" id="nicks"></div>
   </section>
@@ -190,7 +240,7 @@ details summary::before{content:"▸ ";color:var(--fg3)}details[open] summary::b
           <div class="fsbar">
             <button class="exit" id="fsexit">✕ Thoát</button>
             <div class="dp"><span></span><button data-k="up">▲</button><span></span><button data-k="left">◀</button><button data-k="ok">●</button><button data-k="right">▶</button><span></span><button data-k="down">▼</button><span></span></div>
-            <div class="rt"><button data-k="soft1">L</button><button data-k="soft2">R</button><button data-k="clear">⌫</button><button data-k="ok">OK</button></div>
+            <div class="rt"><button data-k="soft1" title="Mở menu">☰</button><button data-k="soft2" title="Đóng menu">✕</button><button data-k="clear">⌫</button><button data-k="ok">OK</button></div>
           </div>
         </div>
         <div class="emustats">
@@ -207,7 +257,7 @@ details summary::before{content:"▸ ";color:var(--fg3)}details[open] summary::b
       </div>
       <div>
         <div class="pad">
-          <button data-k="soft1">◧ Trái</button><button data-k="up">▲</button><button data-k="soft2">Phải ◨</button>
+          <button data-k="soft1">☰ Mở menu</button><button data-k="up">▲</button><button data-k="soft2">✕ Đóng menu</button>
           <button data-k="left">◀</button><button data-k="ok" class="okb">OK</button><button data-k="right">▶</button>
           <button data-k="clear">⌫</button><button data-k="down">▼</button><button data-k="pound">#</button>
           <button data-k="1">1</button><button data-k="2">2</button><button data-k="3">3</button>
@@ -222,6 +272,33 @@ details summary::before{content:"▸ ";color:var(--fg3)}details[open] summary::b
           <div class="row" style="margin-top:6px;flex-wrap:nowrap"><input id="sgame" placeholder="upts · z · hs · gm35" autocapitalize="off"><button id="sgsend" class="pri">Gửi</button></div>
           <div class="btns" id="gquick"></div>
         </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CÀI ĐẶT -->
+  <section class="page" id="p-set">
+    <div class="sbox">
+      <div class="stop">
+        <select class="nsel" id="snick"></select>
+        <div class="seg2"><button class="on">Cài đặt</button><button id="sgoview">Xem game</button></div>
+      </div>
+      <div class="note" id="snote">Đang tải cài đặt…</div>
+      <div class="scard">
+        <h4>Tài khoản game <small id="sst"></small></h4>
+        <div class="f3">
+          <div class="acc-srv"><label class="fl">Server</label><select data-k="server" id="s_server"></select></div>
+          <div><label class="fl">Tài khoản</label><input data-k="account" autocomplete="off" autocapitalize="off"></div>
+          <div><label class="fl">Mật khẩu</label><input data-k="pass" type="password" placeholder="để trống = giữ" autocomplete="new-password"></div>
+          <div><label class="fl">Tên nhân vật</label><input data-k="nick" autocomplete="off" autocapitalize="off"></div>
+        </div>
+      </div>
+      <div class="stabs" id="stabs"></div>
+      <div id="sbody"></div>
+      <div class="sbar">
+        <button class="sbtn o" id="ssave">💾 Lưu vào game</button>
+        <button class="sbtn g" id="sstart">▶ Bắt đầu</button>
+        <button class="sbtn r" id="sstop">■ Dừng</button>
       </div>
     </div>
   </section>
@@ -253,6 +330,7 @@ details summary::before{content:"▸ ";color:var(--fg3)}details[open] summary::b
   <button data-p="home" class="on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="9" rx="2"/><rect x="14" y="3" width="7" height="5" rx="2"/><rect x="14" y="12" width="7" height="9" rx="2"/><rect x="3" y="16" width="7" height="5" rx="2"/></svg>Tổng quan</button>
   <button data-p="nick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="8" r="4"/><path d="M2 21c0-4 3-6 7-6s7 2 7 6"/><path d="M16 4a4 4 0 0 1 0 8M22 21c0-3-2-5-4-5.6"/></svg>Nick</button>
   <button data-p="screen"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="6" y="2" width="12" height="20" rx="3"/><path d="M10 18h4"/></svg>Màn hình</button>
+  <button data-p="set"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>Cài đặt</button>
   <button data-p="cmd"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 17l6-5-6-5M12 19h8"/></svg>Lệnh</button>
   <button data-p="alert"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 8a6 6 0 1 1 12 0c0 7 3 8 3 8H3s3-1 3-8M10 21h4"/></svg>Báo<span class="badge" id="abadge" hidden>0</span></button>
 </nav>
@@ -345,7 +423,7 @@ async function loadRegistry(showErr) {
 }
 
 // ═════════ gọi API của 1 VPS ═════════
-let bytesWin = [];
+let bytesWin = [], lastView = null;
 async function api(s, path, opt) {
   opt = opt || {};
   if (!s) throw new Error("chưa chọn VPS");
@@ -357,6 +435,7 @@ async function api(s, path, opt) {
   catch (e) { s.ok = false; s.err = location.protocol === "https:" && s.url.startsWith("http:") ? "trang https không gọi được http:// — dùng địa chỉ trycloudflare" : "không tới được (tool tắt / địa chỉ cũ)"; throw new Error(s.err); }
   if (!opt.long) s.ping = Math.round(performance.now() - t0);
   if (r.status === 401) { s.ok = false; s.err = "sai mật khẩu"; throw new Error("sai mật khẩu " + s.name); }
+  if (opt.view) { const v = r.headers.get("X-View"); lastView = v == null ? null : +v; }
   if (opt.blob) { if (!r.ok) throw new Error((await r.json().catch(() => ({}))).error || ("HTTP " + r.status)); const b = await r.blob(); bytesWin.push([Date.now(), b.size]); return b; }
   const j = await r.json().catch(() => ({}));
   if (!r.ok) throw new Error(j.error || ("HTTP " + r.status));
@@ -390,6 +469,7 @@ function go(p, fromPop) {
   if (p === "screen") liveLoop();
   if (p === "home") renderHome();
   if (p === "nick") renderNick();
+  if (p === "set") setLoad();
   window.scrollTo(0, 0);
 }
 document.addEventListener("click", e => {
@@ -398,7 +478,7 @@ document.addEventListener("click", e => {
   const s = b.dataset.vps ? servers.find(x => x.id === b.dataset.vps) : cur();
   cmdOn(s, b.dataset.cmd);
 });
-function pick(id, to) { curId = id; LS.set("cur", id); const s = cur(); screenTab = -1; feedRestart(); renderHeader(); if (to) go(to); else { renderNick(); } if (s) pollState(s).then(renderAll); }
+function pick(id, to) { curId = id; LS.set("cur", id); const s = cur(); screenTab = null; feedRestart(); renderHeader(); if (to) go(to); else { renderNick(); } if (s) pollState(s).then(renderAll); }
 
 // ═════════ header ═════════
 function renderHeader() {
@@ -429,6 +509,7 @@ function renderHome() {
     return `<div class="card">
       <div class="row"><span class="dot ${dot}"></span><b class="grow" style="font-size:15px">${esc(s.name)}</b>
         ${st ? `<span class="chip ${latestVer && st.version !== latestVer ? "red" : ""}">${esc(st.version)}${latestVer && st.version !== latestVer ? " → " + esc(latestVer) : ""}</span>` : ""}<span class="chip">${s.ping ? s.ping + " ms" : "–"}</span></div>
+      ${st && !st.launcher ? `<div class="muted" style="margin-top:4px;color:var(--yellow)">⚠ ${st.jar ? "Game đã mở jar nhưng chưa Start" : "Emulator chưa mở NsoManaged.jar"}</div>` : ""}
       ${st ? `<div class="muted" style="margin-top:4px">RAM ${esc(st.ram)} · CPU ${esc(st.cpu)}${st.sleep ? " · màn hình ngủ" : ""} · ${st.tabs.filter(t => t.inGame).length}/${st.tabs.length} trong game · ${money(st.tabs.reduce((a, t) => a + (t.yenH || 0), 0))}/giờ</div>
         <div class="mini">${rows}</div>`
       : `<div class="muted" style="margin-top:6px;color:var(--red)">${esc(s.err || "đang kết nối…")}</div><div class="muted">${esc(s.url)}</div>`}
@@ -437,6 +518,8 @@ function renderHome() {
         <button class="sm" onclick="pick('${s.id}','screen')">🖥 Màn hình</button>
         <button class="sm ok" data-vps="${s.id}" data-cmd="/chay">▶ Chạy</button>
         <button class="sm bad" data-vps="${s.id}" data-cmd="/dung" data-confirm="DỪNG HẾT trên ${esc(s.name)}?">■ Dừng</button>
+        ${st && !st.launcher ? `<button class="sm pri" data-vps="${s.id}" data-cmd="/mojar">📦 Mở jar</button>` : ""}
+        ${st ? `<button class="sm" data-vps="${s.id}" data-cmd="/khoidonglai" data-confirm="Khởi động lại emulator trên ${esc(s.name)}? (cần script theo dõi chạy; mọi nick vào lại)">🔁 Mở lại emulator</button>` : ""}
         ${st ? `<button class="sm ${latestVer && st.version !== latestVer ? "pri" : ""}" data-vps="${s.id}" data-cmd="/capnhat ngay" data-confirm="Cập nhật ${esc(s.name)} ngay?${latestVer ? " (bản mới nhất: " + esc(latestVer) + ")" : ""}\nCó bản mới thì tool tải + khởi động lại, mọi nick vào lại và chạy lại auto như cũ.">⬆ Cập nhật</button>` : ""}
       </div>${st && st.upd ? `<div class="muted" style="margin-top:6px">⬆ ${esc(st.upd)}</div>` : ""}</div>`;
   }).join("");
@@ -479,6 +562,8 @@ function nickCard(t, open) {
     ${bag}
     <div class="btns">
       <button class="sm pri" onclick="pickScreen(${t.i});go('screen')">🖥 Xem</button>
+      <button class="sm" onclick="openSet(${t.i})">⚙ Cài đặt</button>
+      ${t.open ? "" : `<button class="sm" data-cmd="/motab ${n}">📦 Mở game tab</button>`}
       <button class="sm" data-cmd="/vaolai ${n}">🔄 Vào lại</button>
       <button class="sm" data-cmd="/vai ${n}">🎭 Áp vai trò</button>
       <button class="sm" data-cmd="/veup ${n}">🏠 Về up</button>
@@ -491,25 +576,33 @@ function nickCard(t, open) {
 
 // ═════════ màn hình trực tiếp ═════════
 const scr = $("#scr");
-let screenTab = -1, paused = false, curUrl = null, frames = [];
+let screenTab = null, paused = false, curUrl = null, frames = [], wantSwitch = false;
 function renderScreenTabs() {
   const st = cur() && cur().st;
-  $("#scrtabs").innerHTML = st ? (st.tabs.filter(t => t.open).map(t => `<button class="sm ${t.i === screenTab ? "on" : ""}" onclick="pickScreen(${t.i})"><span class="dot ${t.inGame ? "g" : t.inWorld ? "y" : "r"}"></span> ${t.i + 1}. ${esc(t.nick)}</button>`).join("") || '<span class="muted">Chưa có tab nào đang mở.</span>') : '<span class="muted">Đang tải…</span>';
+  if (!st) { $("#scrtabs").innerHTML = '<span class="muted">Đang tải…</span>'; return; }
+  const emu = `<button class="sm ${screenTab === -1 ? "on" : ""}" onclick="pickScreen(-1)">🖥 Emulator${st.launcher ? "" : st.jar ? " (chưa Start)" : " (chưa mở jar)"}</button>`;
+  const jar = st.launcher ? "" : `<button class="sm pri" onclick="cmdOn(cur(),'/mojar').then(()=>setTimeout(()=>pickScreen(-1),3000))">📦 Mở jar + Start</button>`;
+  $("#scrtabs").innerHTML = jar + emu + st.tabs.map(t => `<button class="sm ${t.i === screenTab ? "on" : ""}" onclick="pickScreen(${t.i})" ${st.launcher ? "" : "disabled"}><span class="dot ${t.inGame ? "g" : t.inWorld ? "y" : "r"}"></span> ${t.i + 1}. ${esc(t.nick || "(trống)")}${t.open ? "" : " · mở game"}</button>`).join("");
 }
 function pickScreen(i) {
-  screenTab = i; paused = false; $("#spause").textContent = "⏸ Dừng";
-  $("#scrmsg").textContent = "Đang chuyển emulator sang nick " + (i + 1) + "…"; $("#scrmsg").style.display = "flex";
+  screenTab = i; paused = false; wantSwitch = i >= 0; $("#spause").textContent = "⏸ Dừng";
+  $("#scrmsg").textContent = i < 0 ? "Đang lấy màn hình emulator…" : "Đang chuyển emulator sang nick " + (i + 1) + " (chưa mở thì mở game cho tab này)…"; $("#scrmsg").style.display = "flex";
   renderScreenTabs(); liveLoop();
 }
 async function liveLoop() {
   if (liveLoop.run) return; liveLoop.run = true;
   try {
-    while (page === "screen" && !paused && screenTab >= 0 && !document.hidden) {
+    while (page === "screen" && !paused && screenTab !== null && !document.hidden) {
       const s = cur(), [q, fps] = $("#sq").value.split("|").map(Number), t0 = Date.now();
       try {
-        const b = await api(s, `/api/screen?tab=${screenTab}&q=${q}`, { blob: true });
+        // chỉ khung đầu sau khi CHỌN mới đổi nick trên emulator (sw=1); các khung sau không giành màn hình → không vòng lặp giành nhau
+        const sw = wantSwitch ? 1 : 0; wantSwitch = false;
+        const b = await api(s, `/api/screen?tab=${screenTab}&q=${q}&sw=${sw}`, { blob: true, view: true });
+        if (screenTab >= 0 && lastView !== null && lastView !== screenTab) {
+          $("#scrmsg").innerHTML = `Emulator đang hiện ${lastView < 0 ? "màn hình khác" : "nick " + (lastView + 1)} (tool / người khác vừa chuyển).<br><button class="sm pri" style="pointer-events:auto;margin-top:8px" onclick="wantSwitch=true">Chuyển lại nick ${screenTab + 1}</button>`;
+          $("#scrmsg").style.display = "flex";
+        } else $("#scrmsg").style.display = "none";
         const u = URL.createObjectURL(b); scr.src = u; if (curUrl) URL.revokeObjectURL(curUrl); curUrl = u;
-        $("#scrmsg").style.display = "none";
         frames.push(Date.now()); frames = frames.filter(x => Date.now() - x < 3000);
         $("#efps").textContent = (frames.length / 3).toFixed(1); $("#eping").textContent = Date.now() - t0;
       } catch (e) { $("#scrmsg").textContent = "✗ " + e.message; $("#scrmsg").style.display = "flex"; await sleep(2000); }
@@ -526,7 +619,7 @@ let pressT = 0;
 scr.addEventListener("pointerdown", () => pressT = Date.now());
 scr.addEventListener("contextmenu", e => e.preventDefault());
 scr.addEventListener("pointerup", e => {
-  if (screenTab < 0 || !scr.naturalWidth) return;
+  if (screenTab === null || !scr.naturalWidth) return;
   const r = scr.getBoundingClientRect();
   // ảnh có thể co theo object-fit: tính vùng ảnh thật trong khung
   const k = Math.min(r.width / scr.naturalWidth, r.height / scr.naturalHeight), w = scr.naturalWidth * k, h = scr.naturalHeight * k;
@@ -539,12 +632,13 @@ scr.addEventListener("pointerup", e => {
   api(cur(), "/api/tap", { body: { tab: screenTab, x, y, long: lp ? 1 : 0 } }).catch(er => toast("✗ " + er.message));
 });
 $$("[data-k]").forEach(b => b.onclick = () => key(b.dataset.k));
-function key(k) { if (screenTab < 0) return toast("Chọn nick trước"); if (navigator.vibrate) navigator.vibrate(12); api(cur(), "/api/key", { body: { tab: screenTab, key: k } }).catch(e => toast("✗ " + e.message)); }
+function key(k) { if (screenTab === null) return toast("Chọn màn hình trước"); if (navigator.vibrate) navigator.vibrate(12); api(cur(), "/api/key", { body: { tab: screenTab, key: k } }).catch(e => toast("✗ " + e.message)); }
 $("#stype").onclick = () => { const v = $("#stext").value; if (v) { key("text:" + v); $("#stext").value = ""; } };
+// gõ chữ khi đang ở màn hình đăng nhập / launcher (chưa vào game)
 $("#sgsend").onclick = () => gameCmd($("#sgame").value);
 $("#sgame").addEventListener("keydown", e => { if (e.key === "Enter") gameCmd($("#sgame").value); });
 function gameCmd(v) {
-  v = (v || "").trim(); if (!v) return; if (screenTab < 0) return toast("Chọn nick trước");
+  v = (v || "").trim(); if (!v) return; if (screenTab === null || screenTab < 0) return toast("Lệnh game cần chọn 1 nick");
   api(cur(), "/api/chat", { body: { tab: screenTab, text: v } }).then(() => { toast("✓ " + v); $("#sgame").value = ""; }).catch(e => toast("✗ " + e.message, 4000));
 }
 $("#gquick").innerHTML = [["upts","Up tàn sát"],["z","Dừng auto"],["hs","Hồi sinh"],["tsn","Tàn sát nhanh"],["adan","Đan bật/tắt"],["tn","Tìm nhóm"]]
@@ -554,6 +648,216 @@ window.addEventListener("keydown", e => {
   const m = { ArrowUp: "up", ArrowDown: "down", ArrowLeft: "left", ArrowRight: "right", Enter: "ok", Backspace: "clear", F1: "soft1", F2: "soft2" };
   if (m[e.key]) { key(m[e.key]); e.preventDefault(); } else if (/^[0-9*#]$/.test(e.key)) key(e.key === "*" ? "star" : e.key === "#" ? "pound" : e.key);
 });
+
+
+// ═════════ CÀI ĐẶT (ghi thẳng vào cài đặt gốc của game) ═════════
+// Mỗi ô có data-k = khóa gửi về tool. Chỉ gửi ô ĐÃ ĐỔI → không ghi đè cài đặt khác (tránh chồng chéo với game / vai trò).
+const PCT = [10,20,30,40,50,60,70,80,90].map(v => [v, v + "%"]);
+const LV = a => a.map(v => [v, String(v)]);
+const SET_TABS = [
+  ["ts", "Tàn sát"], ["tn", "Tính năng"], ["nb", "Nhóm / Buff"], ["pk", "PK âm"], ["nl", "Nhặt / Lọc"],
+  ["dd", "Đập đồ"], ["dv", "Danh vọng"], ["hd", "Hang động"], ["a20", "Auto 20"]
+];
+const sw = (k, label, extra) => ({ t: "sw", k, label, extra });
+const SET_DEF = {
+  ts: [
+    { h: "Mục tiêu cày", f: [
+      { t: "in", k: "map", label: "Chọn map", hint: "ID map up (-1 = map đang đứng)", num: 1 },
+      { t: "in", k: "zones", label: "Chọn khu", hint: "cách nhau dấu cách, trống = tự đổi khu" },
+      { t: "sel", k: "mode", label: "Chế độ auto", opts: [["upts","Up theo cấu hình (upts)"],["ts","Tàn sát tại chỗ (ts)"],["tsn","Tàn sát gọi nhóm (tsn)"],["ak","Tự đánh (ak)"]] },
+      { t: "in", k: "skill", label: "Chọn skill", hint: "5 ID skill cách dấu phẩy, vd 5,9,-1,-1,-1" },
+    ]},
+    { h: "Tốc độ", f: [
+      { t: "in", k: "nextmap", label: "Tốc độ next map (ms)", num: 1 },
+      { t: "in", k: "tele", label: "Tele quái (ms)", num: 1 },
+      { t: "in", k: "tele2", label: "Delay giữa 2 lần tele (ms)", num: 1 },
+      { t: "in", k: "openall", label: "Delay mở all (ms)", num: 1 },
+      { t: "in", k: "kts", label: "Khoảng cách tàn sát", num: 1 },
+    ]},
+    { h: "Lệnh nhanh", btn: [["Chỉ đánh quái (ID)…", "tsx", 1], ["Tàn sát theo cấp…", "ts", 1], ["Up (upts)", "upts"], ["Tự đánh (ak)", "ak"], ["Tắt auto (z)", "z"]] },
+  ],
+  tn: [
+    { h: "Hỗ trợ", f: [
+      sw("d3", "Auto HP — ăn khi ≤", { t: "sel", k: "n3", opts: PCT }),
+      sw("e3", "Auto MP — ăn khi ≤", { t: "sel", k: "o3", opts: PCT }),
+      sw("f3", "Auto thức ăn — cấp", { t: "sel", k: "p3", opts: LV([1,10,20,30,40,50,60,70,90]) }),
+      sw("g3", "Dùng chiêu hỗ trợ"), sw("d5", "Auto reconnect"), sw("j4", "Chuyển map hết boss"), sw("c5", "Remap"),
+      sw("m4", "Tự sát hết MP"), sw("n4", "Auto mua thức ăn"),
+    ]},
+    { h: "Đánh quái", f: [
+      sw("f4", "Đánh quái thường"), sw("g4", "Đánh tinh anh"), sw("h4", "Đánh thủ lĩnh"), sw("l4", "Săn TATL"),
+      sw("k4", "Đánh theo nhóm"), sw("i4", "Né PK"), sw("dan", "Auto dùng đan"), sw("e5", "Dùng phân thân"), sw("jump", "Nhảy khi quái né"),
+    ]},
+    { h: "Khác", f: [ sw("g5", "Auto TTTT"), sw("h5", "Auto TTTC"), sw("e4", "Auto Cổ Lệnh"), sw("i5", "Auto mua Cổ Lệnh") ] },
+    { h: "Form gốc của game", forms: [["clone", "Phân thân"], ["edo", "Up Edo"]] },
+  ],
+  nb: [
+    { h: "Auto buff", forms: [["buff", "Cài đặt Auto Buff"]], btn: [["Buff + hồi sinh ngay (buff)", "buff"]] },
+    { h: "Auto nhóm", forms: [["party", "Cài đặt Nhóm"]], btn: [["Tìm nhóm (tn)", "tn"]] },
+  ],
+  pk: [
+    { h: "PK âm", pkam: 1, forms: [["pk", "Cài đặt PK (DS PK / KoPK, delay tele, HP Remap)"]], btn: [["Đi PK âm ngay (atpk)", "atpk"]] },
+  ],
+  nl: [
+    { h: "Nhặt đồ", f: [
+      { t: "in", k: "kcnhat", label: "KC nhặt", num: 1 },
+      sw("v4", "Nhặt yên"),
+      sw("o4", "Nhặt HP/MP — cấp", { t: "sel", k: "q4", opts: LV([0,1,10,20,30,40,50,60,70,80]) }),
+      sw("z4", "Nhặt trang bị — cấp", { t: "sel", k: "y4", opts: LV([0,1,10,20,30,40,50,60]) }),
+      sw("p4", "Nhặt đá — cấp", { t: "sel", k: "r4", opts: LV([0,1,2,3,4,5,6,7]) }),
+      sw("x4", "Luyện đá — tới đá", { t: "sel", k: "w4", opts: LV([4,5,6,7,8,9,10,11]) }),
+      sw("b5", "Nhặt sách võ công"), sw("a5", "Nhặt VP nhiệm vụ"), sw("f5", "Nhặt tất cả"),
+    ]},
+    { h: "Lọc đồ", forms: [["filter", "Cài đặt Lọc đồ"]], btn: [["Lọc đồ ngay (locdo)", "locdo"], ["Nhận đồ (nhan)", "nhan"], ["Cất thủ khố (cat)", "cat"]] },
+  ],
+  dd: [ { h: "Đập đồ", forms: [["upgrade", "Cài đặt Đập đồ"]] } ],
+  dv: [ { h: "Danh vọng", forms: [["daily", "Cài đặt Danh vọng"]], btn: [["Chạy danh vọng (adv)", "adv"], ["NV hằng ngày (anv)", "anv"]] } ],
+  hd: [ { h: "Hang động", forms: [["dungeon", "Cài đặt Hang động"]], btn: [["Vào hang (ahd)", "ahd"]] } ],
+  a20: [ { h: "Làm nhiệm vụ chính", btn: [["Auto NV 10 (as10)", "as10"], ["Auto NV 20 (as20)", "as20"], ["Tà thú (att)", "att"], ["Auto 1–69", "auto69"], ["Dừng 1–69", "stop69"], ["Tắt auto (z)", "z"]] } ],
+};
+let setTab = 0, setSub = "ts", setOrig = null, setForm = null;
+
+function openSet(i) { setTab = i; go("set"); }
+$("#sgoview").onclick = () => { pickScreen(setTab); go("screen"); };
+$("#snick").onchange = () => { setTab = +$("#snick").value; setLoad(); };
+$("#stabs").innerHTML = SET_TABS.map(([k, l]) => `<button data-st="${k}">${l}</button>`).join("");
+$$("#stabs button").forEach(b => b.onclick = () => { setSub = b.dataset.st; setForm = null; renderSet(); });
+
+async function setLoad() {
+  const s = cur(), st = s && s.st;
+  $("#snick").innerHTML = st ? st.tabs.map(t => `<option value="${t.i}" ${t.i === setTab ? "selected" : ""}>${String(t.i + 1).padStart(2, "0")} ${esc(t.nick || "")}</option>`).join("") : "";
+  if (st && !st.tabs.some(t => t.i === setTab) && st.tabs[0]) setTab = st.tabs[0].i;
+  note("Đang đọc cài đặt từ game…");
+  try {
+    setOrig = await api(s, "/api/cfg?tab=" + setTab);
+    setForm = null; renderSet();
+    note(setOrig.open ? (setOrig.inWorld ? "Đang đọc trực tiếp từ game · ô đổi màu cam = chưa lưu" : "Nick chưa vào game — công tắc đọc từ dữ liệu game đã lưu") : "Tab chưa mở game — chỉ lưu tài khoản / mục tiêu vào tool", setOrig.open);
+  } catch (e) { note("✗ " + e.message); }
+}
+function note(t, ok) { const n = $("#snote"); n.textContent = t; n.className = "note" + (ok ? " ok" : ""); }
+
+function valOf(k) {
+  const o = setOrig || {};
+  if (k in (o.flags || {})) return o.flags[k];
+  if (k in (o.speed || {})) return o.speed[k];
+  return o[k];
+}
+function inputHtml(f) {
+  const v = valOf(f.k);
+  if (f.t === "sel") return `<select data-k="${f.k}">${f.opts.map(([a, b]) => `<option value="${a}" ${String(v) === String(a) ? "selected" : ""}>${esc(b)}</option>`).join("")}${f.opts.some(([a]) => String(a) === String(v)) || v == null ? "" : `<option value="${esc(v)}" selected>${esc(v)}</option>`}</select>`;
+  return `<input data-k="${f.k}" value="${esc(v == null ? "" : v)}" ${f.num ? 'inputmode="numeric"' : ""} autocapitalize="off">`;
+}
+function fieldHtml(f) {
+  if (f.t === "sw") {
+    const on = !!valOf(f.k), has = valOf(f.k) !== undefined;
+    return `<div class="tg"><label class="sw"><input type="checkbox" data-k="${f.k}" ${on ? "checked" : ""} ${has ? "" : "disabled"}><i></i></label><span class="grow">${esc(f.label)}${has ? "" : ' <small style="color:#b45309">(game chưa có)</small>'}</span>${f.extra ? inputHtml(f.extra) : ""}</div>`;
+  }
+  return `<div><label class="fl">${esc(f.label)}${f.hint ? ` <small>${esc(f.hint)}</small>` : ""}</label>${inputHtml(f)}</div>`;
+}
+function renderSet() {
+  $$("#stabs button").forEach(b => b.classList.toggle("on", b.dataset.st === setSub));
+  const o = setOrig || {};
+  // tài khoản
+  $("#s_server").innerHTML = (o.servers || []).map(x => `<option ${x === o.server ? "selected" : ""}>${esc(x)}</option>`).join("");
+  $$("#p-set .f3 [data-k]").forEach(el => { if (el.dataset.k !== "server") el.value = el.dataset.k === "pass" ? "" : (o[el.dataset.k] || ""); el.classList.remove("dirty"); });
+  $("#sst").textContent = (o.roleLabel || "") + (o.busy ? " · đang " + o.busy : "") + (o.hasPass === false ? " · chưa có mật khẩu" : "");
+  const secs = SET_DEF[setSub] || [];
+  $("#sbody").innerHTML = secs.map((sec, si) => {
+    const sws = (sec.f || []).filter(f => f.t === "sw"), ins = (sec.f || []).filter(f => f.t !== "sw");
+    return `<div class="scard"><h4>${esc(sec.h)}</h4>
+      ${ins.length ? `<div class="f2">${ins.map(fieldHtml).join("")}</div>` : ""}
+      ${sws.length ? `<div style="margin-top:${ins.length ? 10 : 0}px">${sws.map(fieldHtml).join("")}</div>` : ""}
+      ${sec.pkam ? `<div class="tg"><label class="sw"><input type="checkbox" id="s_pkam" ${o.pkam ? "checked" : ""}><i></i></label><span class="grow">PK âm + giữ Lv (bật/tắt ngay)</span></div>` : ""}
+      ${(sec.btn || []).length ? `<div class="btns">${sec.btn.map(([l, c, ask]) => `<button class="sbtn" data-gc="${c}" data-ask="${ask ? 1 : ""}">${esc(l)}</button>`).join("")}</div>` : ""}
+      ${(sec.forms || []).map(([id, l]) => `<div class="btns"><button class="sbtn o" data-form="${id}">⚙ ${esc(l)}</button></div><div id="gf-${id}"></div>`).join("")}
+    </div>`;
+  }).join("") + `<div class="hint">Công tắc và số ghi THẲNG vào cài đặt gốc của game (như menu Cài đặt ON/OFF / Tối ưu) và game tự lưu. Form "⚙" mở đúng form gốc trong game, bấm lệnh của form (Lưu…) để game tự lưu. Chỉ ô đã đổi mới được gửi.</div>`;
+  // đánh dấu ô đã đổi
+  $$("#p-set [data-k]").forEach(el => el.addEventListener(el.type === "checkbox" ? "change" : "input", () => {
+    const orig = el.dataset.k === "server" ? o.server : valOf(el.dataset.k);
+    const now = el.type === "checkbox" ? el.checked : el.value;
+    const d = el.type === "checkbox" ? now !== !!orig : String(now) !== String(orig == null ? "" : orig);
+    (el.type === "checkbox" ? el.parentElement : el).classList.toggle("dirty", el.dataset.k === "pass" ? !!now : d);
+  }));
+  $$("#sbody [data-gc]").forEach(b => b.onclick = () => {
+    let c = b.dataset.gc;
+    if (b.dataset.ask) { const v = prompt(b.textContent.replace("…", "") + " — nhập giá trị"); if (!v) return; c += " " + v; }
+    api(cur(), "/api/chat", { body: { tab: setTab, text: c } }).then(() => toast("✓ " + c)).catch(e => toast("✗ " + e.message, 4000));
+  });
+  $$("#sbody [data-form]").forEach(b => b.onclick = () => formOpen(b.dataset.form));
+  const pk = $("#s_pkam"); if (pk) pk.onchange = () => cmdOn(cur(), `/pkam ${setTab + 1} ${pk.checked ? "on" : "off"}`);
+}
+
+$("#ssave").onclick = async () => {
+  const o = setOrig || {}, data = {};
+  $$("#p-set [data-k]").forEach(el => {
+    const k = el.dataset.k;
+    if (el.disabled) return;
+    if (el.type === "checkbox") { if (el.checked !== !!valOf(k)) data[k] = el.checked; return; }
+    const v = el.value.trim(), orig = k === "server" ? o.server : valOf(k);
+    if (k === "pass") { if (v) data.pass = el.value; return; }
+    if (String(v) !== String(orig == null ? "" : orig)) data[k] = el.inputMode === "numeric" || /^(n3|o3|p3|q4|r4|w4|y4)$/.test(k) ? Number(v) : v;
+  });
+  if (!Object.keys(data).length) return toast("Chưa đổi gì");
+  $("#ssave").disabled = true; note("Đang ghi vào game…");
+  try {
+    const r = await api(cur(), "/api/cfg", { body: { tab: setTab, data: JSON.stringify(data) } });
+    toast("✓ " + (r.msgs || []).join(" · "), 5000);
+    await setLoad();
+  } catch (e) { note("✗ " + e.message); toast("✗ " + e.message, 5000); }
+  finally { $("#ssave").disabled = false; }
+};
+$("#sstart").onclick = () => { const t = (setOrig || {}); cmdOn(cur(), (t.inWorld ? "/batauto " : "/vaolai ") + (setTab + 1)); };
+$("#sstop").onclick = () => { if (confirm("Tắt auto nick " + (setTab + 1) + "?")) cmdOn(cur(), "/tatauto " + (setTab + 1)); };
+
+// ── form gốc của game ──
+async function formOpen(id) {
+  const box = $("#gf-" + id); if (!box) return;
+  box.innerHTML = '<div class="hint">Đang mở form trong game…</div>';
+  try { const f = await api(cur(), "/api/form", { body: { tab: setTab, id } }); setForm = { id, f }; renderForm(); }
+  catch (e) { box.innerHTML = `<div class="hint" style="color:#dc2626">✗ ${esc(e.message)}</div>`; }
+}
+function renderForm() {
+  if (!setForm) return;
+  const { id, f } = setForm, box = $("#gf-" + id); if (!box) return;
+  if (f.closed) { box.innerHTML = '<div class="hint" style="color:#15803d">✓ Đã lưu và đóng form trong game.</div>'; return; }
+  let body = "";
+  if (f.kind === "form") body = f.items.map((it, i) => {
+    const lb = it.label ? `<label class="fl">${esc(it.label)}</label>` : "";
+    if (it.t === "text") return `<div class="fi">${lb}<input data-fi="${i}" value="${esc(it.v)}" maxlength="${it.max || 200}" ${it.num ? 'inputmode="numeric"' : ""} autocapitalize="off"></div>`;
+    if (it.t === "multi") return `<div class="fi">${lb}<div class="chk">${it.opts.map((o, k) => `<label><input type="checkbox" data-fi="${i}" data-o="${k}" ${it.sel[k] ? "checked" : ""}>${esc(o)}</label>`).join("")}</div></div>`;
+    if (it.t === "one") return `<div class="fi">${lb}<select data-fi="${i}">${it.opts.map((o, k) => `<option value="${k}" ${it.sel[k] ? "selected" : ""}>${esc(o)}</option>`).join("")}</select></div>`;
+    if (it.t === "gauge") return `<div class="fi">${lb}<input data-fi="${i}" type="number" min="0" max="${it.max}" value="${it.v}"></div>`;
+    if (it.t === "note") return it.v || it.label ? `<div class="fi hint">${esc((it.label || "") + " " + (it.v || ""))}</div>` : "";
+    return "";
+  }).join("");
+  else if (f.kind === "list") body = `<div class="fi"><select data-fi="0">${f.opts.map((o, k) => `<option value="${k}" ${k === f.sel ? "selected" : ""}>${esc(o)}</option>`).join("")}</select></div>`;
+  else if (f.kind === "textbox") body = `<div class="fi"><input data-fi="0" value="${esc(f.v)}"></div>`;
+  else if (f.kind === "alert") body = `<div class="fi">${esc(f.v)}</div>`;
+  const cmds = (f.cmds || []).map((c, k) => `<button class="sbtn ${/lưu|ok|xong|đồng ý|save|chọn|áp dụng/i.test(c) ? "o" : ""}" data-fc="${k}">${esc(c)}</button>`).join("");
+  box.innerHTML = `<div class="gform"><div style="font-weight:700;margin-bottom:8px">📋 ${esc(f.title || "Form game")}</div>${body}
+    <div class="btns">${f.kind === "list" ? '<button class="sbtn o" data-fc="-1">Chọn</button>' : ""}${cmds}<button class="sbtn" data-fx="1">Đóng (không lưu)</button></div>
+    <div class="hint">Đây là form gốc trong game của nick ${setTab + 1}. Bấm lệnh của form (thường là "Lưu") để game tự lưu.</div></div>`;
+  box.querySelectorAll("[data-fc]").forEach(b => b.onclick = () => formAct(+b.dataset.fc));
+  box.querySelector("[data-fx]").onclick = async () => { try { await api(cur(), "/api/form", { body: { tab: setTab, act: "close" } }); } catch (e) {} box.innerHTML = ""; setForm = null; };
+}
+async function formAct(cmd) {
+  const { id, f } = setForm, box = $("#gf-" + id);
+  let values = [];
+  if (f.kind === "form") values = f.items.map((it, i) => {
+    if (it.t === "text") return box.querySelector(`[data-fi="${i}"]`).value;
+    if (it.t === "gauge") return Number(box.querySelector(`[data-fi="${i}"]`).value);
+    if (it.t === "multi") return it.opts.map((o, k) => box.querySelector(`[data-fi="${i}"][data-o="${k}"]`).checked);
+    if (it.t === "one") { const v = +box.querySelector(`[data-fi="${i}"]`).value; return it.opts.map((o, k) => k === v); }
+    return null;
+  });
+  else if (f.kind === "list") values = [+box.querySelector('[data-fi="0"]').value];
+  else if (f.kind === "textbox") values = [box.querySelector('[data-fi="0"]').value];
+  try {
+    const r = await api(cur(), "/api/form", { body: { tab: setTab, act: "do", token: f.token, cmd, values: JSON.stringify(values) } });
+    setForm = { id, f: r }; renderForm(); toast(r.closed ? "✓ Game đã lưu" : "✓ Đã gửi");
+  } catch (e) { toast("✗ " + e.message, 5000); }
+}
 
 // ═════════ lệnh ═════════
 const MENU = [["📋 Trạng thái","/tt"],["👤 Từng nick","/nick"],["▶ Chạy cả đội","/chay"],["■ DỪNG HẾT","/dung"],["📷 Ảnh emulator","/anh"],["📷 Ảnh tất cả","/anh *"],

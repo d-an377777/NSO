@@ -1,11 +1,11 @@
 {
- "version": "v6.4.1",
- "notes": "Tự kiểm tra 1 ngày/lần, nút Cập nhật thủ công, cập nhật xong chạy lại mọi auto như cũ",
+ "version": "v6.5",
+ "notes": "Tab Cài đặt trên web (ghi thẳng vào game, form gốc), màn hình điều khiển từ lúc mở jar, nút Mở jar",
  "files": [
   {
    "name": "NsoCommander.exe",
-   "sha256": "e8e740c0a066dc74f6b70dd268fe8f87659304fb24fe51adff94291d2ebc8647",
-   "size": 1100130
+   "sha256": "645008bf6c739fda7d59c5399982bf157a48e30a839aad7a841961f601997889",
+   "size": 1117363
   },
   {
    "name": "NsoManaged.jar",
