@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0f1420">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>NSO Commander · Web</title>
+<style>
+:root{--bg:#0f1420;--bg2:#161d2d;--bg3:#1e2740;--line:#2a3554;--fg:#e8ecf5;--fg2:#a9b3cc;--fg3:#6f7a96;--cyan:#4cc9f0;--green:#3ddc84;--yellow:#ffd166;--red:#ff5c7a;--violet:#a78bfa}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:var(--bg);color:var(--fg);font:14px/1.4 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+button{font:inherit;color:inherit;background:var(--bg3);border:1px solid var(--line);border-radius:10px;padding:8px 10px;cursor:pointer}
+button:active{transform:scale(.97)}
+button.pri{background:#1d4ed8;border-color:#2563eb}
+button.ok{background:#14532d;border-color:#15803d}
+button.bad{background:#5b1222;border-color:#9f1239}
+button.sm{padding:5px 8px;font-size:12px;border-radius:8px}
+input,select{font:inherit;color:var(--fg);background:var(--bg2);border:1px solid var(--line);border-radius:10px;padding:9px 10px;width:100%}
+header{position:sticky;top:0;z-index:5;background:rgba(15,20,32,.96);backdrop-filter:blur(6px);border-bottom:1px solid var(--line);padding:8px 12px calc(8px) 12px;display:flex;align-items:center;gap:8px}
+header .brand{font-weight:700;letter-spacing:.3px}
+header .brand small{color:var(--fg3);font-weight:500}
+.dot{width:9px;height:9px;border-radius:50%;display:inline-block;background:var(--fg3);flex:none}
+.dot.g{background:var(--green)}.dot.y{background:var(--yellow)}.dot.r{background:var(--red)}
+.stats{margin-left:auto;display:flex;gap:10px;color:var(--fg2);font-size:12px;white-space:nowrap}
+main{padding:10px 10px calc(78px + env(safe-area-inset-bottom))}
+nav{position:fixed;bottom:0;left:0;right:0;z-index:5;background:var(--bg2);border-top:1px solid var(--line);display:grid;grid-template-columns:repeat(5,1fr);padding-bottom:env(safe-area-inset-bottom)}
+nav button{background:none;border:0;border-radius:0;padding:9px 0 8px;color:var(--fg3);font-size:11px;display:flex;flex-direction:column;align-items:center;gap:2px}
+nav button b{font-size:19px;line-height:1}
+nav button.on{color:var(--cyan)}
+nav .badge{background:var(--red);color:#fff;border-radius:9px;font-size:10px;padding:0 5px;margin-left:2px}
+.page{display:none}.page.on{display:block}
+.card{background:var(--bg2);border:1px solid var(--line);border-radius:14px;padding:11px;margin-bottom:10px}
+.row{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.muted{color:var(--fg3);font-size:12px}
+.chip{font-size:11px;padding:2px 7px;border-radius:20px;background:var(--bg3);border:1px solid var(--line);color:var(--fg2)}
+.chip.main{color:var(--yellow)}.chip.buff{color:var(--violet)}.chip.sub{color:var(--cyan)}
+.bar{height:6px;background:#0b0f19;border-radius:4px;overflow:hidden;flex:1;min-width:60px}
+.bar i{display:block;height:100%}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.btns{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.kv{display:grid;grid-template-columns:auto 1fr;gap:2px 10px;font-size:13px;margin-top:6px}
+.kv span:nth-child(odd){color:var(--fg3)}
+details summary{cursor:pointer;color:var(--fg2);font-size:12px;margin-top:6px}
+.bag{font-size:12px;color:var(--fg2);max-height:220px;overflow:auto;margin-top:4px}
+.bag div{padding:2px 0;border-bottom:1px dashed #263052}
+/* màn hình */
+.screenwrap{position:relative;background:#000;border-radius:12px;overflow:hidden;border:1px solid var(--line);touch-action:manipulation}
+#scr{display:block;width:auto;max-width:100%;max-height:58vh;margin:0 auto;image-rendering:pixelated;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none}
+.scrmsg{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:var(--fg2);text-align:center;padding:20px;font-size:13px;pointer-events:none}
+.tapfx{position:absolute;width:26px;height:26px;margin:-13px 0 0 -13px;border:2px solid var(--cyan);border-radius:50%;pointer-events:none;animation:fx .45s ease-out forwards}
+@keyframes fx{to{transform:scale(1.8);opacity:0}}
+.pad{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:8px}
+.pad button{padding:12px 0;font-size:16px;font-weight:600}
+.tabsel{display:flex;gap:6px;overflow-x:auto;padding-bottom:4px}
+.tabsel button{white-space:nowrap}
+.tabsel button.on{border-color:var(--cyan);color:var(--cyan)}
+/* tin */
+.feed{display:flex;flex-direction:column;gap:8px}
+.msg{background:var(--bg2);border:1px solid var(--line);border-radius:12px;padding:9px 10px;white-space:pre-wrap;word-break:break-word;font-size:13px}
+.msg.alert{border-color:#7c2d12;background:#1f1410}
+.msg.me{background:#13233f;border-color:#1e3a8a;align-self:flex-end;max-width:85%}
+.msg time{display:block;color:var(--fg3);font-size:11px;margin-bottom:3px}
+.msg img{max-width:100%;border-radius:8px;margin-top:6px;display:block}
+.kbrow{display:flex;gap:6px;margin-top:6px}
+.kbrow button{flex:1;font-size:12px;padding:7px 4px}
+.inbar{position:sticky;bottom:calc(64px + env(safe-area-inset-bottom));display:flex;gap:6px;background:var(--bg);padding:8px 0}
+.menu{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:10px}
+.menu button{font-size:12px;text-align:left}
+.log{font:12px/1.45 ui-monospace,Consolas,monospace;white-space:pre-wrap;word-break:break-all;background:#0b0f19;border:1px solid var(--line);border-radius:12px;padding:8px;max-height:70vh;overflow:auto}
+.log .e{color:var(--red)}.log .w{color:var(--yellow)}
+.shots{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.shots figure{margin:0;background:var(--bg2);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.shots img{width:100%;display:block;min-height:60px;background:#000}
+.shots figcaption{font-size:11px;color:var(--fg2);padding:4px 6px}
+/* đăng nhập */
+#setup{position:fixed;inset:0;z-index:20;background:var(--bg);display:none;align-items:center;justify-content:center;padding:20px}
+#setup .card{width:100%;max-width:420px}
+#setup h2{margin:0 0 4px}
+#setup label{display:block;margin:10px 0 4px;color:var(--fg2);font-size:12px}
+.toast{position:fixed;left:50%;top:60px;transform:translateX(-50%);background:#111827;border:1px solid var(--line);border-radius:10px;padding:8px 12px;z-index:30;font-size:13px;max-width:90vw;display:none}
+#viewer{position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:25;display:none;align-items:center;justify-content:center;flex-direction:column;padding:10px}
+#viewer img{max-width:100%;max-height:85vh}
+@media(min-width:900px){main{max-width:1100px;margin:0 auto}#p-nick .list{display:grid;grid-template-columns:1fr 1fr;gap:10px}#p-nick .card{margin:0}}
+</style>
+</head>
+<body>
+<div id="setup">
+  <div class="card">
+    <h2>NSO Commander · Web</h2>
+    <div class="muted">Kết nối tới tool trên VPS. Địa chỉ lấy ở trang <b>Từ xa · Báo</b> của tool (hoặc gửi <b>/web</b> cho bot Telegram).</div>
+    <label>Địa chỉ máy chủ (https://….trycloudflare.com hoặc http://IP:8686)</label>
+    <input id="su" placeholder="https://xxxx.trycloudflare.com" autocomplete="off" autocapitalize="off">
+    <label>Mật khẩu trang web</label>
+    <input id="sk" type="password" autocomplete="current-password">
+    <div class="row" style="margin-top:12px"><button class="pri" id="sgo" style="flex:1">Kết nối</button></div>
+    <div id="serr" class="muted" style="color:var(--red);margin-top:8px"></div>
+  </div>
+</div>
+
+<header>
+  <span class="dot" id="hdot"></span>
+  <div class="brand">NSO <small id="htag"></small></div>
+  <div class="stats"><span id="hon">–</span><span id="hping">–</span><span id="hkb"></span></div>
+  <button class="sm" id="hset" title="Đổi máy chủ">⚙</button>
+</header>
+
+<main>
+  <section class="page on" id="p-nick">
+    <div class="card row" id="sysline" style="font-size:12px;color:var(--fg2)"></div>
+    <div class="btns" style="margin:0 0 10px">
+      <button class="ok sm" data-cmd="/chay">▶ Chạy cả đội</button>
+      <button class="bad sm" data-cmd="/dung" data-confirm="DỪNG HẾT tất cả nick?">■ Dừng hết</button>
+      <button class="sm" data-cmd="/goiquat">♦ Gọi Quạt</button>
+      <button class="sm" data-cmd="/boss">🐉 Săn boss</button>
+      <button class="sm" data-cmd="/ngu">😴 Ngủ/thức màn hình</button>
+    </div>
+    <div class="list" id="nicks"></div>
+  </section>
+
+  <section class="page" id="p-screen">
+    <div class="tabsel" id="scrtabs"></div>
+    <div class="screenwrap" id="sw"><img id="scr" alt=""><div class="scrmsg" id="scrmsg">Chọn nick để xem màn hình</div></div>
+    <div class="row" style="margin-top:6px;font-size:12px;color:var(--fg2)">
+      <span id="sfps">–</span>
+      <select id="sq" style="width:auto;padding:5px 8px;font-size:12px">
+        <option value="40|2">Tiết kiệm</option><option value="60|4" selected>Vừa</option><option value="80|6">Nét</option>
+      </select>
+      <label class="row" style="gap:4px"><input type="checkbox" id="slong" style="width:auto"> Nhấn giữ</label>
+      <button class="sm" id="spause" style="margin-left:auto">⏸ Dừng xem</button>
+    </div>
+    <div class="pad">
+      <button data-k="soft1">◧ Trái</button><button data-k="up">▲</button><button data-k="soft2">Phải ◨</button>
+      <button data-k="left">◀</button><button data-k="ok" class="pri">OK</button><button data-k="right">▶</button>
+      <button data-k="clear">⌫ Xóa</button><button data-k="down">▼</button><button data-k="pound">#</button>
+      <button data-k="1">1</button><button data-k="2">2</button><button data-k="3">3</button>
+      <button data-k="4">4</button><button data-k="5">5</button><button data-k="6">6</button>
+      <button data-k="7">7</button><button data-k="8">8</button><button data-k="9">9</button>
+      <button data-k="star">*</button><button data-k="0">0</button><button data-k="pound">#</button>
+    </div>
+    <div class="card" style="margin-top:10px">
+      <div class="muted">Gõ chữ vào ô đang mở trong game</div>
+      <div class="row" style="margin-top:6px;flex-wrap:nowrap"><input id="stext" placeholder="chữ / số"><button id="stype">Gõ</button></div>
+      <div class="muted" style="margin-top:10px">Lệnh game (như gõ chat: upts, z, hs, tsn, adan, gm35…)</div>
+      <div class="row" style="margin-top:6px;flex-wrap:nowrap"><input id="sgame" placeholder="upts" autocapitalize="off"><button id="sgsend" class="pri">Gửi</button></div>
+      <div class="btns" id="gquick"></div>
+    </div>
+  </section>
+
+  <section class="page" id="p-cmd">
+    <div class="menu" id="menu"></div>
+    <div class="feed" id="cfeed"></div>
+    <div class="inbar"><input id="cin" placeholder="/tt  ·  /nick 2  ·  /lenh 2 tn  ·  /boss on 1" autocapitalize="off"><button class="pri" id="csend">Gửi</button></div>
+  </section>
+
+  <section class="page" id="p-alert">
+    <div class="row" style="margin-bottom:8px"><button class="sm" id="anotif">🔔 Bật thông báo trình duyệt</button><button class="sm" id="ashots">🖼 Tải ảnh boss</button></div>
+    <h3 style="margin:6px 0">Ảnh boss / nick chết</h3>
+    <div class="shots" id="shots"><div class="muted">Bấm "Tải ảnh boss".</div></div>
+    <h3 style="margin:14px 0 6px">Báo động</h3>
+    <div class="feed" id="afeed"></div>
+  </section>
+
+  <section class="page" id="p-log">
+    <div class="row" style="margin-bottom:8px;flex-wrap:nowrap">
+      <input id="lf" placeholder="lọc: tên nick, boss, ✗…">
+      <button class="sm" id="lerr">⚠ Lỗi</button><button class="sm" id="lref">↻</button>
+    </div>
+    <label class="row muted" style="margin-bottom:6px;gap:4px"><input type="checkbox" id="lauto" style="width:auto" checked> tự làm mới 5 giây</label>
+    <div class="log" id="log"></div>
+  </section>
+</main>
+
+<nav>
+  <button data-p="nick" class="on"><b>👥</b>Nick</button>
+  <button data-p="screen"><b>🖥</b>Màn hình</button>
+  <button data-p="cmd"><b>⌨</b>Lệnh</button>
+  <button data-p="alert"><b>🔔</b>Báo<span class="badge" id="abadge" hidden>0</span></button>
+  <button data-p="log"><b>📜</b>Nhật ký</button>
+</nav>
+<div class="toast" id="toast"></div>
+<div id="viewer"><img id="vimg" alt=""><button style="margin-top:10px" id="vclose">Đóng</button></div>
+
+<script>
+"use strict";
+const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
+const store = {
+  get(k, d) { try { const v = localStorage.getItem("nso." + k); return v == null ? d : v; } catch (e) { return d; } },
+  set(k, v) { try { localStorage.setItem("nso." + k, v); } catch (e) {} }
+};
+let SERVER = "", KEY = "", state = null, page = "nick", screenTab = -1, live = false, lastFeed = 0, unread = 0, firstFeed = true;
+let pingMs = 0, bytesWin = [], viewing = -1;
+
+// ── cấu hình máy chủ: #s=… (link tool gửi) > đã lưu > chính trang của tool ──
+(function initServer() {
+  const h = new URLSearchParams(location.hash.slice(1));
+  if (h.get("s")) { store.set("server", h.get("s")); history.replaceState(null, "", location.pathname); }
+  SERVER = store.get("server", "");
+  if (!SERVER && !/vercel\.app$|github\.io$|netlify\.app$/.test(location.hostname) && location.protocol.startsWith("http")) SERVER = location.origin;
+  KEY = store.get("key", "");
+})();
+
+function toast(t, ms) { const e = $("#toast"); e.textContent = t; e.style.display = "block"; clearTimeout(toast.t); toast.t = setTimeout(() => e.style.display = "none", ms || 2500); }
+function esc(s) { return String(s == null ? "" : s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[c])); }
+function hhmm(ms) { const d = new Date(ms); return d.toLocaleTimeString("vi-VN", {hour:"2-digit", minute:"2-digit", second:"2-digit"}); }
+function num(s) { const n = parseInt(String(s || "").replace(/[^\d-]/g, ""), 10); return isNaN(n) ? 0 : n; }
+function money(n) { n = Number(n) || 0; return n >= 1e9 ? (n/1e9).toFixed(2) + "B" : n >= 1e6 ? (n/1e6).toFixed(1) + "M" : n >= 1e3 ? Math.round(n/1e3) + "k" : String(n); }
+
+async function api(path, opt) {
+  opt = opt || {};
+  const t0 = performance.now();
+  const init = { method: opt.body ? "POST" : "GET", headers: { "X-Key": KEY }, cache: "no-store" };
+  if (opt.body) { init.headers["Content-Type"] = "application/x-www-form-urlencoded"; init.body = new URLSearchParams(opt.body).toString(); }
+  if (opt.signal) init.signal = opt.signal;
+  const r = await fetch(SERVER + path, init);
+  if (r.status === 401) { showSetup("Sai mật khẩu."); throw new Error("sai mật khẩu"); }
+  if (!opt.long) pingMs = Math.round(performance.now() - t0);
+  if (opt.blob) { if (!r.ok) throw new Error((await r.json().catch(() => ({}))).error || ("HTTP " + r.status)); const b = await r.blob(); bytesWin.push([Date.now(), b.size]); return b; }
+  const j = await r.json().catch(() => ({}));
+  if (!r.ok) throw new Error(j.error || ("HTTP " + r.status));
+  return j;
+}
+const cmd = text => api("/api/cmd", { body: { text } }).then(() => toast("✓ " + text)).catch(e => toast("✗ " + e.message, 4000));
+
+// ── đăng nhập ──
+function showSetup(err) { $("#setup").style.display = "flex"; $("#su").value = SERVER; $("#sk").value = KEY; $("#serr").textContent = err || ""; }
+$("#hset").onclick = () => showSetup("");
+$("#sgo").onclick = async () => {
+  SERVER = $("#su").value.trim().replace(/\/+$/, ""); KEY = $("#sk").value;
+  if (!/^https?:\/\//.test(SERVER)) { $("#serr").textContent = "Địa chỉ phải bắt đầu bằng https:// hoặc http://"; return; }
+  if (location.protocol === "https:" && SERVER.startsWith("http:")) { $("#serr").textContent = "Trang https (Vercel) không gọi được địa chỉ http:// — dùng địa chỉ https://….trycloudflare.com, hoặc mở thẳng http://IP:cổng."; return; }
+  try { const j = await api("/api/ping"); store.set("server", SERVER); store.set("key", KEY); $("#setup").style.display = "none"; toast("Đã kết nối " + j.tag + " · " + j.version); start(); }
+  catch (e) { $("#serr").textContent = "Không kết nối được: " + e.message + " (tool đã bật trang web? địa chỉ đường hầm mới nhất?)"; }
+};
+
+// ── điều hướng ──
+$$("nav button").forEach(b => b.onclick = () => go(b.dataset.p));
+function go(p) {
+  page = p;
+  $$("nav button").forEach(b => b.classList.toggle("on", b.dataset.p === p));
+  $$(".page").forEach(s => s.classList.toggle("on", s.id === "p-" + p));
+  if (p === "alert") { unread = 0; badge(); }
+  if (p === "screen") { live = screenTab >= 0; liveLoop(); } else live = false;
+  if (p === "log") loadLog();
+  window.scrollTo(0, 0);
+}
+function badge() { const b = $("#abadge"); b.hidden = unread === 0; b.textContent = unread; }
+document.addEventListener("click", e => {
+  const b = e.target.closest("[data-cmd]"); if (!b) return;
+  if (b.dataset.confirm && !confirm(b.dataset.confirm)) return;
+  cmd(b.dataset.cmd);
+});
+
+// ── trạng thái nick ──
+async function pollState() {
+  try {
+    state = await api("/api/state");
+    viewing = state.viewing;
+    $("#hdot").className = "dot g";
+    renderState();
+  } catch (e) { $("#hdot").className = "dot r"; $("#hping").textContent = "mất kết nối"; }
+}
+function renderState() {
+  const s = state; if (!s) return;
+  $("#htag").textContent = s.tag + " · " + s.version;
+  const on = s.tabs.filter(t => t.inGame).length;
+  $("#hon").textContent = on + "/" + s.tabs.length + " online";
+  $("#hping").textContent = pingMs + " ms";
+  $("#sysline").innerHTML = `<span>RAM ${esc(s.ram)}</span><span>CPU ${esc(s.cpu)}</span>${s.sleep ? '<span class="chip">màn hình đang ngủ</span>' : ''}${s.teamBusy ? '<span class="chip">đội đang chạy việc</span>' : ''}<span>${s.simple ? "chế độ đơn giản" : "chế độ đầy đủ"}</span><span>Telegram: ${esc(s.tg)}</span>`;
+  const list = $("#nicks");
+  const open = new Set($$("#nicks details[open]").map(d => d.dataset.i));
+  list.innerHTML = s.tabs.map(t => nickCard(t, open.has(String(t.i)))).join("");
+  // chọn tab màn hình
+  $("#scrtabs").innerHTML = s.tabs.filter(t => t.open).map(t => `<button class="sm ${t.i === screenTab ? "on" : ""}" data-st="${t.i}">${t.inGame ? "🟢" : t.inWorld ? "🟡" : "🔴"} ${t.i + 1} ${esc(t.nick)}</button>`).join("") || '<span class="muted">Chưa có tab nào đang mở.</span>';
+  $$("#scrtabs [data-st]").forEach(b => b.onclick = () => pickScreen(+b.dataset.st));
+}
+function bar(p, c) { p = Math.max(0, Math.min(100, p || 0)); return `<div class="bar"><i style="width:${p}%;background:${c}"></i></div>`; }
+function nickCard(t, open) {
+  const n = t.i + 1, dot = t.inGame ? "g" : t.inWorld ? "y" : "r";
+  const b = t.boss || null;
+  const bossLine = b ? `<span>Săn boss</span><span>${b.hunt ? "🐉 " + esc(b.st) : b.want ? "BẬT · chờ thông báo" : "tắt"}${b.ev ? '<br><span class="muted">' + esc(b.ev) + "</span>" : ""}${b.item ? '<br><span class="muted">🎒 ' + esc(b.item) + "</span>" : ""}</span>` : "";
+  const bag = t.bag ? `<details data-i="${t.i}" ${open ? "open" : ""}><summary>🎒 Hành trang · ${esc(t.bag[0])}</summary><div class="bag">${t.bag.slice(1).map(x => "<div>" + esc(x) + "</div>").join("") || "trống"}</div></details>` : "";
+  return `<div class="card">
+    <div class="row"><span class="dot ${dot}"></span><b>${n}. ${esc(t.nick || "(trống)")}</b><span class="chip ${esc(t.role)}">${esc(t.roleLabel)}</span>
+      ${t.pkam ? '<span class="chip" style="color:var(--red)">PK âm</span>' : ""}<span class="muted" style="margin-left:auto">${esc(t.server)}</span></div>
+    <div class="muted" style="margin-top:4px">${esc(t.state)}</div>
+    ${t.hp ? `<div class="row" style="margin-top:6px;flex-wrap:nowrap"><span class="muted" style="width:22px">HP</span>${bar(t.hpP, "var(--red)")}<span class="muted">${t.hpP}%</span></div>
+    <div class="row" style="flex-wrap:nowrap"><span class="muted" style="width:22px">MP</span>${bar(t.mpP, "var(--cyan)")}<span class="muted">${t.mpP}%</span></div>` : ""}
+    <div class="kv">
+      ${t.lv ? `<span>Lv · Map</span><span>${esc(t.lv)} · map ${esc(t.map)} khu ${esc(t.zone)}</span>` : ""}
+      ${t.yen ? `<span>Yên</span><span>${money(num(t.yen))}${t.yenH ? " · " + money(t.yenH) + "/giờ" : ""}${num(t.yen) >= 1999000000 ? ' <span style="color:var(--yellow)">⚠ gần trần 2 tỷ</span>' : ""}</span>` : ""}
+      ${t.auto ? `<span>Auto</span><span>${esc(t.auto)}</span>` : ""}
+      ${t.msg ? `<span>Game báo</span><span>${esc(t.msg)}</span>` : ""}
+      ${t.dialog ? `<span>Hộp thoại</span><span>${esc(t.dialog)}</span>` : ""}
+      ${bossLine}
+      <span>Hôm nay</span><span>rớt ${t.drop} · chết ${t.dead} · tự cứu ${t.rescue}</span>
+    </div>
+    ${bag}
+    <div class="btns">
+      <button class="sm pri" onclick="pickScreen(${t.i});go('screen')">🖥 Xem</button>
+      <button class="sm" data-cmd="/vaolai ${n}">🔄 Vào lại</button>
+      <button class="sm" data-cmd="/vai ${n}">🎭 Áp vai trò</button>
+      <button class="sm" data-cmd="/veup ${n}">🏠 Về up</button>
+      <button class="sm" data-cmd="/tatauto ${n}">⏸ Tắt auto</button>
+      <button class="sm" data-cmd="/batauto ${n}">▶ Bật auto</button>
+      <button class="sm" data-cmd="/pkam ${n} ${t.pkam ? "off" : "on"}">⚔ PK âm ${t.pkam ? "→ tắt" : "→ bật"}</button>
+      ${b ? `<button class="sm" data-cmd="/boss ${b.want ? "off" : "on"} ${n}">🐉 ${b.want ? "Tắt" : "Bật"} săn boss</button><button class="sm" data-cmd="/boss do ${n}">🔎 Dò boss</button>` : ""}
+    </div>
+  </div>`;
+}
+
+// ── màn hình trực tiếp ──
+const scr = $("#scr");
+let curUrl = null, frames = [], paused = false;
+function pickScreen(i) {
+  screenTab = i; paused = false; $("#spause").textContent = "⏸ Dừng xem";
+  $("#scrmsg").textContent = "Đang chuyển emulator sang nick " + (i + 1) + "…"; $("#scrmsg").style.display = "flex";
+  renderState(); live = page === "screen"; liveLoop();
+}
+async function liveLoop() {
+  if (liveLoop.run) return; liveLoop.run = true;
+  try {
+    while (live && !paused && screenTab >= 0 && !document.hidden) {
+      const [q, fps] = $("#sq").value.split("|").map(Number);
+      const t0 = Date.now();
+      try {
+        const b = await api(`/api/screen?tab=${screenTab}&q=${q}`, { blob: true });
+        const u = URL.createObjectURL(b);
+        scr.src = u; if (curUrl) URL.revokeObjectURL(curUrl); curUrl = u;
+        $("#scrmsg").style.display = "none";
+        frames.push(Date.now()); frames = frames.filter(x => Date.now() - x < 3000);
+        $("#sfps").textContent = (frames.length / 3).toFixed(1) + " khung/giây · " + Math.round(b.size / 1024) + " KB";
+      } catch (e) { $("#scrmsg").textContent = "✗ " + e.message; $("#scrmsg").style.display = "flex"; await sleep(2000); }
+      const wait = 1000 / fps - (Date.now() - t0);
+      if (wait > 0) await sleep(wait);
+    }
+  } finally { liveLoop.run = false; }
+}
+const sleep = ms => new Promise(r => setTimeout(r, ms));
+document.addEventListener("visibilitychange", () => { if (!document.hidden && page === "screen") liveLoop(); if (!document.hidden) pollState(); });
+$("#spause").onclick = () => { paused = !paused; $("#spause").textContent = paused ? "▶ Xem tiếp" : "⏸ Dừng xem"; if (!paused) liveLoop(); };
+let pressT = 0;
+scr.addEventListener("pointerdown", () => pressT = Date.now());
+scr.addEventListener("contextmenu", e => e.preventDefault());
+scr.addEventListener("pointerup", e => {
+  if (screenTab < 0 || !scr.naturalWidth) return;
+  const r = scr.getBoundingClientRect();
+  const x = Math.round((e.clientX - r.left) * scr.naturalWidth / r.width), y = Math.round((e.clientY - r.top) * scr.naturalHeight / r.height);
+  const lp = $("#slong").checked || Date.now() - pressT > 600;
+  const fx = document.createElement("div"); fx.className = "tapfx"; fx.style.left = (e.clientX - r.left) + "px"; fx.style.top = (e.clientY - r.top) + "px";
+  $("#sw").appendChild(fx); setTimeout(() => fx.remove(), 500);
+  api("/api/tap", { body: { tab: screenTab, x, y, long: lp ? 1 : 0 } }).catch(er => toast("✗ " + er.message));
+});
+$$(".pad [data-k]").forEach(b => b.onclick = () => key(b.dataset.k));
+function key(k) { if (screenTab < 0) return toast("Chọn nick trước"); api("/api/key", { body: { tab: screenTab, key: k } }).catch(e => toast("✗ " + e.message)); }
+$("#stype").onclick = () => { const v = $("#stext").value; if (v) { key("text:" + v); $("#stext").value = ""; } };
+$("#sgsend").onclick = () => gameCmd($("#sgame").value);
+$("#sgame").addEventListener("keydown", e => { if (e.key === "Enter") gameCmd($("#sgame").value); });
+function gameCmd(v) {
+  v = (v || "").trim(); if (!v) return; if (screenTab < 0) return toast("Chọn nick trước");
+  api("/api/chat", { body: { tab: screenTab, text: v } }).then(() => { toast("✓ " + v); $("#sgame").value = ""; }).catch(e => toast("✗ " + e.message, 4000));
+}
+$("#gquick").innerHTML = [["upts","Up tàn sát"],["z","Dừng auto"],["hs","Hồi sinh"],["tsn","Tàn sát nhanh"],["adan","Đan (bật/tắt)"],["tn","Tìm nhóm"]]
+  .map(([c, l]) => `<button class="sm" data-g="${c}">${l} <span class="muted">${c}</span></button>`).join("");
+$$("#gquick [data-g]").forEach(b => b.onclick = () => gameCmd(b.dataset.g));
+window.addEventListener("keydown", e => {
+  if (page !== "screen" || e.target.tagName === "INPUT") return;
+  const m = { ArrowUp: "up", ArrowDown: "down", ArrowLeft: "left", ArrowRight: "right", Enter: "ok", Backspace: "clear", F1: "soft1", F2: "soft2" };
+  if (m[e.key]) { key(m[e.key]); e.preventDefault(); } else if (/^[0-9*#]$/.test(e.key)) key(e.key === "*" ? "star" : e.key === "#" ? "pound" : e.key);
+});
+
+// ── lệnh (như Telegram) ──
+const MENU = [["📋 Trạng thái","/tt"],["👤 Từng nick","/nick"],["▶ Chạy cả đội","/chay"],["■ DỪNG HẾT","/dung"],["📷 Ảnh emulator","/anh"],["📷 Ảnh tất cả nick","/anh *"],
+  ["♦ Gọi Quạt","/goiquat"],["📜 Kịch bản","/kb"],["⏰ Hẹn giờ","/hengio"],["🔔 Luật tự động","/luat"],["📊 Báo cáo","/baocao"],["⚠ Lỗi gần đây","/loi"],
+  ["💾 Lưu hiện trạng","/luu"],["↺ Khôi phục","/khoiphuc"],["🐉 Săn boss","/boss"],["🖥 VPS","/vps"],["🌐 Proxy","/proxy"],["🔁 Khởi động lại","/khoidonglai"],["❓ Tất cả lệnh","/giup"]];
+$("#menu").innerHTML = MENU.map(([l, c]) => `<button data-c="${esc(c)}">${l}</button>`).join("");
+$$("#menu [data-c]").forEach(b => b.onclick = () => sendCmd(b.dataset.c));
+$("#csend").onclick = () => sendCmd($("#cin").value);
+$("#cin").addEventListener("keydown", e => { if (e.key === "Enter") sendCmd($("#cin").value); });
+function sendCmd(t) {
+  t = (t || "").trim(); if (!t) return;
+  if (/^\/?(dung|khoidonglai)\b/.test(t) && !confirm("Chắc chắn: " + t + " ?")) return;
+  addMsg($("#cfeed"), { kind: "me", text: t, at: Date.now() }); $("#cin").value = "";
+  api("/api/cmd", { body: { text: t } }).catch(e => addMsg($("#cfeed"), { kind: "msg", text: "✗ " + e.message, at: Date.now() }));
+}
+function addMsg(box, it) {
+  const d = document.createElement("div");
+  d.className = "msg " + (it.kind === "alert" ? "alert" : it.kind === "me" ? "me" : "");
+  d.innerHTML = `<time>${hhmm(it.at)}</time>${esc(it.text)}`;
+  if (it.img) { const im = document.createElement("img"); d.appendChild(im); api("/api/img?id=" + it.img, { blob: true }).then(b => { im.src = URL.createObjectURL(b); im.onclick = () => view(im.src); }).catch(() => im.remove()); }
+  if (it.kb) it.kb.forEach(row => {
+    const r = document.createElement("div"); r.className = "kbrow";
+    row.forEach(([l, c]) => { const b = document.createElement("button"); b.textContent = l; b.onclick = () => sendCmd(c); r.appendChild(b); });
+    d.appendChild(r);
+  });
+  box.prepend(d);
+  while (box.children.length > 120) box.lastChild.remove();
+}
+function view(src) { $("#vimg").src = src; $("#viewer").style.display = "flex"; }
+$("#vclose").onclick = () => $("#viewer").style.display = "none";
+
+// ── bảng tin (long-poll) ──
+async function feedLoop() {
+  if (feedLoop.run) return; feedLoop.run = true;
+  while (true) {
+    try {
+      const j = await api(`/api/feed?after=${lastFeed}&wait=${firstFeed ? 0 : 20}`, { long: true });
+      for (const it of j.items) {
+        if (it.kind === "alert") {
+          addMsg($("#afeed"), it);
+          if (!firstFeed) { if (page !== "alert") { unread++; badge(); } notify(it.text); if (/📸/.test(it.text)) setTimeout(loadShots, 6000); }
+        } else addMsg($("#cfeed"), it);
+      }
+      lastFeed = j.last; firstFeed = false;
+    } catch (e) { await sleep(5000); }
+  }
+}
+function notify(t) {
+  try { if (document.hidden && "Notification" in window && Notification.permission === "granted") new Notification("NSO", { body: t.slice(0, 200) }); } catch (e) {}
+}
+$("#anotif").onclick = () => { if ("Notification" in window) Notification.requestPermission().then(p => toast(p === "granted" ? "Đã bật (chỉ báo khi trang còn mở)" : "Trình duyệt không cho phép")); else toast("Trình duyệt không hỗ trợ"); };
+
+// ── ảnh boss ──
+$("#ashots").onclick = loadShots;
+async function loadShots() {
+  try {
+    const j = await api("/api/shots");
+    const box = $("#shots");
+    if (!j.shots.length) { box.innerHTML = '<div class="muted">Chưa có ảnh (bật "Chụp màn hình khi boss vừa hết" ở trang Săn boss của tool).</div>'; return; }
+    box.innerHTML = j.shots.slice(0, 40).map(s => `<figure><img data-f="${esc(s.f)}" alt=""><figcaption>${esc(s.f.replace(/\.png$/, "").replace("/", " "))}</figcaption></figure>`).join("");
+    $$("#shots img").forEach(im => api("/api/shot?f=" + encodeURIComponent(im.dataset.f), { blob: true }).then(b => { im.src = URL.createObjectURL(b); im.onclick = () => view(im.src); }).catch(() => {}));
+  } catch (e) { toast("✗ " + e.message); }
+}
+
+// ── nhật ký ──
+let errOnly = false;
+$("#lerr").onclick = () => { errOnly = !errOnly; $("#lerr").classList.toggle("bad", errOnly); loadLog(); };
+$("#lref").onclick = loadLog;
+$("#lf").addEventListener("input", () => { clearTimeout(loadLog.t); loadLog.t = setTimeout(loadLog, 400); });
+async function loadLog() {
+  try {
+    const f = errOnly ? "!err" : $("#lf").value;
+    const j = await api("/api/log?n=400&f=" + encodeURIComponent(f));
+    const el = $("#log"), atBottom = el.scrollTop + el.clientHeight >= el.scrollHeight - 30;
+    el.innerHTML = j.lines.map(l => `<div class="${/✗/.test(l) ? "e" : /⚠/.test(l) ? "w" : ""}">${esc(l)}</div>`).join("") || '<span class="muted">Trống</span>';
+    if (atBottom) el.scrollTop = el.scrollHeight;
+  } catch (e) {}
+}
+
+// ── vòng chạy ──
+let started = false;
+function start() {
+  if (started) return; started = true;
+  pollState(); feedLoop();
+  setInterval(() => { if (!document.hidden) pollState(); }, 3000);
+  setInterval(() => { if (page === "log" && $("#lauto").checked && !document.hidden) loadLog(); }, 5000);
+  setInterval(() => {
+    bytesWin = bytesWin.filter(x => Date.now() - x[0] < 5000);
+    const kb = bytesWin.reduce((a, x) => a + x[1], 0) / 5 / 1024;
+    $("#hkb").textContent = kb > 0.5 ? kb.toFixed(0) + " KB/s" : "";
+  }, 1000);
+}
+if (!SERVER || !KEY) showSetup(""); else api("/api/ping").then(() => start()).catch(e => showSetup("Không kết nối được: " + e.message));
+</script>
+</body>
+</html>
