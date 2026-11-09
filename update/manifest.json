@@ -1,16 +1,16 @@
 {
- "version": "v6.5",
- "notes": "Tab Cài đặt trên web (ghi thẳng vào game, form gốc), màn hình điều khiển từ lúc mở jar, nút Mở jar",
+ "version": "v6.5.3",
+ "notes": "Săn boss: tự bật PK Đồ Sát, tắt Né PK, chỉ đánh boss; săn xong trả lại như cũ",
  "files": [
   {
    "name": "NsoCommander.exe",
-   "sha256": "645008bf6c739fda7d59c5399982bf157a48e30a839aad7a841961f601997889",
-   "size": 1117363
+   "sha256": "911e5f82bfc9abc2ec801a992cad27e40e91c2b31a8f64eed5ee16b4f13b72b0",
+   "size": 1118038
   },
   {
    "name": "NsoManaged.jar",
-   "sha256": "6eacdc02555cb4f735788658f60c7300ffb7302160e453fb761e60a5086cc639",
-   "size": 6276060
+   "sha256": "52b421388715ee2b9e3752d149d9cc509ddb731f32b7506ef67bc8e80911ff4e",
+   "size": 6281662
   }
  ]
 }
