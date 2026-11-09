@@ -1,0 +1,16 @@
+{
+ "version": "v6.4.1",
+ "notes": "Tự kiểm tra 1 ngày/lần, nút Cập nhật thủ công, cập nhật xong chạy lại mọi auto như cũ",
+ "files": [
+  {
+   "name": "NsoCommander.exe",
+   "sha256": "e8e740c0a066dc74f6b70dd268fe8f87659304fb24fe51adff94291d2ebc8647",
+   "size": 1100130
+  },
+  {
+   "name": "NsoManaged.jar",
+   "sha256": "6eacdc02555cb4f735788658f60c7300ffb7302160e453fb761e60a5086cc639",
+   "size": 6276060
+  }
+ ]
+}

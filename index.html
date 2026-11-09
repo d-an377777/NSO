@@ -3,289 +3,470 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#0f1420">
+<meta name="theme-color" content="#0b1020">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<title>NSO Commander · Web</title>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icon.svg">
+<title>NSO Commander</title>
 <style>
-:root{--bg:#0f1420;--bg2:#161d2d;--bg3:#1e2740;--line:#2a3554;--fg:#e8ecf5;--fg2:#a9b3cc;--fg3:#6f7a96;--cyan:#4cc9f0;--green:#3ddc84;--yellow:#ffd166;--red:#ff5c7a;--violet:#a78bfa}
+:root{
+  --bg:#0b1020;--bg1:#10172b;--bg2:#151e36;--bg3:#1c2744;--line:#25324f;--line2:#33446b;
+  --fg:#eef2fb;--fg2:#aab5cf;--fg3:#6e7a98;
+  --acc:#5b8cff;--acc2:#8b5cf6;--cyan:#38d3f5;--green:#34d399;--yellow:#fbbf24;--red:#fb7185;--orange:#fb923c;
+  --r:16px;--font:"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif;
+}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html,body{margin:0;background:var(--bg);color:var(--fg);font:14px/1.4 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
-button{font:inherit;color:inherit;background:var(--bg3);border:1px solid var(--line);border-radius:10px;padding:8px 10px;cursor:pointer}
+[hidden]{display:none!important}
+html,body{margin:0;background:var(--bg);color:var(--fg);font:14px/1.45 var(--font)}
+body{background:radial-gradient(1200px 600px at 10% -10%,#1b2a55 0,transparent 60%),radial-gradient(900px 500px at 110% 10%,#2a1b55 0,transparent 55%),var(--bg);background-attachment:fixed;min-height:100vh}
+button{font:inherit;color:inherit;background:var(--bg3);border:1px solid var(--line);border-radius:12px;padding:8px 12px;cursor:pointer;transition:background .15s,border-color .15s,transform .05s}
+button:hover{border-color:var(--line2)}
 button:active{transform:scale(.97)}
-button.pri{background:#1d4ed8;border-color:#2563eb}
-button.ok{background:#14532d;border-color:#15803d}
-button.bad{background:#5b1222;border-color:#9f1239}
-button.sm{padding:5px 8px;font-size:12px;border-radius:8px}
-input,select{font:inherit;color:var(--fg);background:var(--bg2);border:1px solid var(--line);border-radius:10px;padding:9px 10px;width:100%}
-header{position:sticky;top:0;z-index:5;background:rgba(15,20,32,.96);backdrop-filter:blur(6px);border-bottom:1px solid var(--line);padding:8px 12px calc(8px) 12px;display:flex;align-items:center;gap:8px}
-header .brand{font-weight:700;letter-spacing:.3px}
-header .brand small{color:var(--fg3);font-weight:500}
-.dot{width:9px;height:9px;border-radius:50%;display:inline-block;background:var(--fg3);flex:none}
-.dot.g{background:var(--green)}.dot.y{background:var(--yellow)}.dot.r{background:var(--red)}
-.stats{margin-left:auto;display:flex;gap:10px;color:var(--fg2);font-size:12px;white-space:nowrap}
-main{padding:10px 10px calc(78px + env(safe-area-inset-bottom))}
-nav{position:fixed;bottom:0;left:0;right:0;z-index:5;background:var(--bg2);border-top:1px solid var(--line);display:grid;grid-template-columns:repeat(5,1fr);padding-bottom:env(safe-area-inset-bottom)}
-nav button{background:none;border:0;border-radius:0;padding:9px 0 8px;color:var(--fg3);font-size:11px;display:flex;flex-direction:column;align-items:center;gap:2px}
-nav button b{font-size:19px;line-height:1}
-nav button.on{color:var(--cyan)}
-nav .badge{background:var(--red);color:#fff;border-radius:9px;font-size:10px;padding:0 5px;margin-left:2px}
-.page{display:none}.page.on{display:block}
-.card{background:var(--bg2);border:1px solid var(--line);border-radius:14px;padding:11px;margin-bottom:10px}
+button.pri{background:linear-gradient(135deg,var(--acc),var(--acc2));border:0;color:#fff;font-weight:600}
+button.ok{background:rgba(52,211,153,.14);border-color:rgba(52,211,153,.45);color:#a7f3d0}
+button.bad{background:rgba(251,113,133,.13);border-color:rgba(251,113,133,.45);color:#fecdd3}
+button.ghost{background:transparent}
+button.sm{padding:6px 10px;font-size:12.5px;border-radius:10px}
+button.xs{padding:3px 8px;font-size:11.5px;border-radius:8px}
+input,select{font:inherit;color:var(--fg);background:var(--bg1);border:1px solid var(--line);border-radius:12px;padding:10px 12px;width:100%;outline:none}
+input:focus,select:focus{border-color:var(--acc)}
+h2,h3{margin:0}
+.muted{color:var(--fg3);font-size:12.5px}
 .row{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
-.muted{color:var(--fg3);font-size:12px}
-.chip{font-size:11px;padding:2px 7px;border-radius:20px;background:var(--bg3);border:1px solid var(--line);color:var(--fg2)}
-.chip.main{color:var(--yellow)}.chip.buff{color:var(--violet)}.chip.sub{color:var(--cyan)}
-.bar{height:6px;background:#0b0f19;border-radius:4px;overflow:hidden;flex:1;min-width:60px}
-.bar i{display:block;height:100%}
-.grid2{display:grid;grid-template-columns:1fr 1fr;gap:6px}
-.btns{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
-.kv{display:grid;grid-template-columns:auto 1fr;gap:2px 10px;font-size:13px;margin-top:6px}
-.kv span:nth-child(odd){color:var(--fg3)}
-details summary{cursor:pointer;color:var(--fg2);font-size:12px;margin-top:6px}
-.bag{font-size:12px;color:var(--fg2);max-height:220px;overflow:auto;margin-top:4px}
-.bag div{padding:2px 0;border-bottom:1px dashed #263052}
+.grow{flex:1;min-width:0}
+.dot{width:9px;height:9px;border-radius:50%;display:inline-block;background:var(--fg3);flex:none}
+.dot.g{background:var(--green);box-shadow:0 0 0 3px rgba(52,211,153,.18)}.dot.y{background:var(--yellow);box-shadow:0 0 0 3px rgba(251,191,36,.15)}.dot.r{background:var(--red);box-shadow:0 0 0 3px rgba(251,113,133,.15)}
+.card{background:linear-gradient(180deg,rgba(28,39,68,.72),rgba(21,30,54,.72));border:1px solid var(--line);border-radius:var(--r);padding:13px;margin-bottom:12px;backdrop-filter:blur(8px)}
+.chip{font-size:11.5px;padding:2px 8px;border-radius:999px;background:var(--bg1);border:1px solid var(--line);color:var(--fg2);white-space:nowrap}
+.chip.main{color:var(--yellow);border-color:rgba(251,191,36,.35)}.chip.buff{color:#c4b5fd;border-color:rgba(139,92,246,.4)}.chip.sub{color:var(--cyan);border-color:rgba(56,211,245,.35)}.chip.red{color:var(--red);border-color:rgba(251,113,133,.4)}
+.bar{height:7px;background:#0a0f1d;border-radius:5px;overflow:hidden;flex:1;min-width:50px}
+.bar i{display:block;height:100%;border-radius:5px}
+.btns{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.kv{display:grid;grid-template-columns:auto 1fr;gap:3px 12px;font-size:13px;margin-top:8px}
+.kv>span:nth-child(odd){color:var(--fg3)}
+/* header */
+header{position:sticky;top:0;z-index:10;background:rgba(11,16,32,.82);backdrop-filter:blur(12px);border-bottom:1px solid var(--line);padding:calc(8px + env(safe-area-inset-top)) 12px 8px;display:flex;align-items:center;gap:10px}
+.back{width:34px;height:34px;padding:0;border-radius:11px;font-size:22px;line-height:1;flex:none;display:grid;place-items:center}
+.logo{width:30px;height:30px;border-radius:9px;background:linear-gradient(135deg,var(--acc),var(--acc2));display:grid;place-items:center;font-weight:800;font-size:13px;flex:none}
+.vpsbtn{display:flex;align-items:center;gap:8px;background:var(--bg2);border:1px solid var(--line);border-radius:999px;padding:5px 12px 5px 10px;min-width:0;max-width:52vw}
+.vpsbtn b{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.hstats{margin-left:auto;display:flex;gap:6px}
+.stat{background:var(--bg2);border:1px solid var(--line);border-radius:10px;padding:3px 8px;font-size:11.5px;color:var(--fg2);white-space:nowrap}
+.stat b{color:var(--fg)}
+@media(max-width:520px){.hstats .wide{display:none}}
+main{padding:12px 12px calc(84px + env(safe-area-inset-bottom));max-width:1180px;margin:0 auto}
+nav{position:fixed;bottom:0;left:0;right:0;z-index:10;background:rgba(16,23,43,.94);backdrop-filter:blur(12px);border-top:1px solid var(--line);display:grid;grid-template-columns:repeat(5,1fr);padding-bottom:env(safe-area-inset-bottom)}
+nav button{background:none;border:0;border-radius:0;padding:9px 0 8px;color:var(--fg3);font-size:11px;display:flex;flex-direction:column;align-items:center;gap:3px;position:relative}
+nav button svg{width:22px;height:22px}
+nav button.on{color:var(--fg)}
+nav button.on::before{content:"";position:absolute;top:0;left:30%;right:30%;height:3px;border-radius:0 0 3px 3px;background:linear-gradient(90deg,var(--acc),var(--acc2))}
+.badge{position:absolute;top:5px;left:56%;background:var(--red);color:#fff;border-radius:9px;font-size:10px;padding:0 5px;min-width:16px;text-align:center}
+.page{display:none;animation:fade .18s ease}.page.on{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(4px)}to{opacity:1}}
+/* tổng quan */
+.hero{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:12px}
+.hero .card{margin:0;padding:11px}
+.hero .v{font-size:22px;font-weight:700;letter-spacing:-.3px}
+.hero .l{font-size:11.5px;color:var(--fg3)}
+@media(max-width:620px){.hero{grid-template-columns:repeat(2,1fr)}}
+.vgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:12px}
+.vgrid .card{margin:0}
+.mini{display:grid;grid-template-columns:auto 1fr auto;gap:4px 8px;align-items:center;font-size:12.5px;margin-top:8px}
+.mini .n{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ava{width:34px;height:34px;border-radius:11px;display:grid;place-items:center;font-weight:700;font-size:14px;flex:none;background:var(--bg1);border:1px solid var(--line)}
+.ava.main{background:linear-gradient(135deg,#b45309,#f59e0b);border:0}.ava.buff{background:linear-gradient(135deg,#6d28d9,#a78bfa);border:0}.ava.sub{background:linear-gradient(135deg,#0e7490,#22d3ee);border:0}
+.ngrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:12px}
+.ngrid .card{margin:0}
+details summary{cursor:pointer;color:var(--fg2);font-size:12.5px;margin-top:8px;list-style:none}
+details summary::before{content:"▸ ";color:var(--fg3)}details[open] summary::before{content:"▾ "}
+.bag{font-size:12.5px;color:var(--fg2);max-height:240px;overflow:auto;margin-top:6px;border:1px solid var(--line);border-radius:10px;padding:4px 8px;background:var(--bg1)}
+.bag div{padding:3px 0;border-bottom:1px dashed #233056}.bag div:last-child{border:0}
+.toolbar{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
 /* màn hình */
-.screenwrap{position:relative;background:#000;border-radius:12px;overflow:hidden;border:1px solid var(--line);touch-action:manipulation}
-#scr{display:block;width:auto;max-width:100%;max-height:58vh;margin:0 auto;image-rendering:pixelated;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none}
-.scrmsg{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:var(--fg2);text-align:center;padding:20px;font-size:13px;pointer-events:none}
-.tapfx{position:absolute;width:26px;height:26px;margin:-13px 0 0 -13px;border:2px solid var(--cyan);border-radius:50%;pointer-events:none;animation:fx .45s ease-out forwards}
-@keyframes fx{to{transform:scale(1.8);opacity:0}}
-.pad{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:8px}
-.pad button{padding:12px 0;font-size:16px;font-weight:600}
-.tabsel{display:flex;gap:6px;overflow-x:auto;padding-bottom:4px}
+.tabsel{display:flex;gap:6px;overflow-x:auto;padding-bottom:6px;margin-bottom:6px;scrollbar-width:none}
 .tabsel button{white-space:nowrap}
-.tabsel button.on{border-color:var(--cyan);color:var(--cyan)}
+.tabsel button.on{border-color:var(--acc);background:rgba(91,140,255,.15)}
+.emu{display:grid;grid-template-columns:1fr;gap:10px}
+@media(min-width:900px){.emu{grid-template-columns:minmax(0,1fr) 300px}}
+.screenwrap{position:relative;background:#000;border-radius:var(--r);overflow:hidden;border:1px solid var(--line);display:flex;align-items:center;justify-content:center;min-height:240px}
+#scr{display:block;max-width:100%;max-height:62vh;image-rendering:pixelated;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none;touch-action:manipulation}
+.scrmsg{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:var(--fg2);text-align:center;padding:20px;font-size:13px;pointer-events:none;background:rgba(0,0,0,.35)}
+.tapfx{position:absolute;width:28px;height:28px;margin:-14px 0 0 -14px;border:2px solid var(--cyan);border-radius:50%;pointer-events:none;animation:fx .45s ease-out forwards}
+@keyframes fx{to{transform:scale(1.9);opacity:0}}
+.emustats{display:flex;gap:6px;flex-wrap:wrap;margin:8px 0}
+.pad{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}
+.pad button{padding:13px 0;font-size:16px;font-weight:600;border-radius:14px}
+.pad .okb{background:linear-gradient(135deg,var(--acc),var(--acc2));border:0;color:#fff}
+.fsbar{display:none}
+.screenwrap:fullscreen{border-radius:0;border:0;display:flex}
+.screenwrap:fullscreen #scr{max-height:100vh;max-width:100vw;height:100vh;object-fit:contain}
+.screenwrap:fullscreen .fsbar{display:flex;position:absolute;inset:auto 0 0 0;justify-content:space-between;align-items:flex-end;padding:12px;pointer-events:none}
+.fsbar>div{pointer-events:auto;display:grid;gap:6px}
+.fsbar button{background:rgba(20,28,52,.55);border:1px solid rgba(255,255,255,.18);color:#fff;width:54px;height:54px;padding:0;border-radius:50%;font-size:18px;backdrop-filter:blur(4px)}
+.fsbar .dp{grid-template-columns:repeat(3,54px)}
+.fsbar .rt{grid-template-columns:repeat(2,54px)}
+.fsbar .exit{position:absolute;top:12px;right:12px;width:auto;height:auto;padding:6px 12px;border-radius:10px;font-size:13px}
 /* tin */
 .feed{display:flex;flex-direction:column;gap:8px}
-.msg{background:var(--bg2);border:1px solid var(--line);border-radius:12px;padding:9px 10px;white-space:pre-wrap;word-break:break-word;font-size:13px}
-.msg.alert{border-color:#7c2d12;background:#1f1410}
-.msg.me{background:#13233f;border-color:#1e3a8a;align-self:flex-end;max-width:85%}
+.msg{background:var(--bg2);border:1px solid var(--line);border-radius:14px;padding:9px 11px;white-space:pre-wrap;word-break:break-word;font-size:13px}
+.msg.alert{border-color:rgba(251,146,60,.45);background:linear-gradient(180deg,rgba(251,146,60,.08),rgba(21,30,54,.8))}
+.msg.me{background:rgba(91,140,255,.16);border-color:rgba(91,140,255,.45);align-self:flex-end;max-width:85%}
 .msg time{display:block;color:var(--fg3);font-size:11px;margin-bottom:3px}
-.msg img{max-width:100%;border-radius:8px;margin-top:6px;display:block}
-.kbrow{display:flex;gap:6px;margin-top:6px}
-.kbrow button{flex:1;font-size:12px;padding:7px 4px}
-.inbar{position:sticky;bottom:calc(64px + env(safe-area-inset-bottom));display:flex;gap:6px;background:var(--bg);padding:8px 0}
-.menu{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:10px}
-.menu button{font-size:12px;text-align:left}
-.log{font:12px/1.45 ui-monospace,Consolas,monospace;white-space:pre-wrap;word-break:break-all;background:#0b0f19;border:1px solid var(--line);border-radius:12px;padding:8px;max-height:70vh;overflow:auto}
+.msg img{max-width:100%;border-radius:10px;margin-top:6px;display:block;cursor:zoom-in}
+.kbrow{display:flex;gap:6px;margin-top:6px}.kbrow button{flex:1;font-size:12px;padding:7px 4px}
+.inbar{position:sticky;bottom:calc(70px + env(safe-area-inset-bottom));display:flex;gap:6px;padding:8px 0;background:linear-gradient(0deg,var(--bg) 70%,transparent)}
+.menu{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:6px;margin-bottom:12px}
+.menu button{font-size:12.5px;text-align:left}
+.seg{display:flex;background:var(--bg1);border:1px solid var(--line);border-radius:12px;padding:3px;gap:3px;margin-bottom:12px}
+.seg button{flex:1;border:0;background:transparent;border-radius:9px;padding:7px}
+.seg button.on{background:var(--bg3)}
+.log{font:12px/1.5 ui-monospace,Consolas,monospace;white-space:pre-wrap;word-break:break-all;background:#080c18;border:1px solid var(--line);border-radius:14px;padding:10px;max-height:68vh;overflow:auto}
 .log .e{color:var(--red)}.log .w{color:var(--yellow)}
-.shots{display:grid;grid-template-columns:1fr 1fr;gap:6px}
-.shots figure{margin:0;background:var(--bg2);border:1px solid var(--line);border-radius:10px;overflow:hidden}
-.shots img{width:100%;display:block;min-height:60px;background:#000}
-.shots figcaption{font-size:11px;color:var(--fg2);padding:4px 6px}
-/* đăng nhập */
-#setup{position:fixed;inset:0;z-index:20;background:var(--bg);display:none;align-items:center;justify-content:center;padding:20px}
-#setup .card{width:100%;max-width:420px}
-#setup h2{margin:0 0 4px}
-#setup label{display:block;margin:10px 0 4px;color:var(--fg2);font-size:12px}
-.toast{position:fixed;left:50%;top:60px;transform:translateX(-50%);background:#111827;border:1px solid var(--line);border-radius:10px;padding:8px 12px;z-index:30;font-size:13px;max-width:90vw;display:none}
-#viewer{position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:25;display:none;align-items:center;justify-content:center;flex-direction:column;padding:10px}
-#viewer img{max-width:100%;max-height:85vh}
-@media(min-width:900px){main{max-width:1100px;margin:0 auto}#p-nick .list{display:grid;grid-template-columns:1fr 1fr;gap:10px}#p-nick .card{margin:0}}
+.shots{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px}
+.shots figure{margin:0;background:var(--bg2);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.shots img{width:100%;display:block;min-height:80px;background:#000;cursor:zoom-in}
+.shots figcaption{font-size:11px;color:var(--fg2);padding:5px 7px}
+/* sheet */
+.sheet{position:fixed;inset:0;z-index:30;background:rgba(5,8,18,.7);backdrop-filter:blur(4px);display:none;align-items:flex-end;justify-content:center}
+.sheet.on{display:flex}
+.sheet .box{width:100%;max-width:560px;max-height:92vh;overflow:auto;background:var(--bg1);border:1px solid var(--line);border-radius:20px 20px 0 0;padding:16px 16px calc(16px + env(safe-area-inset-bottom))}
+@media(min-width:700px){.sheet{align-items:center}.sheet .box{border-radius:20px}}
+.sheet label{display:block;margin:10px 0 4px;color:var(--fg2);font-size:12.5px}
+.vitem{display:flex;align-items:center;gap:10px;padding:10px;border:1px solid var(--line);border-radius:14px;margin-top:8px;background:var(--bg2);cursor:pointer}
+.vitem.on{border-color:var(--acc)}
+.toast{position:fixed;left:50%;top:calc(64px + env(safe-area-inset-top));transform:translateX(-50%);background:#0f172a;border:1px solid var(--line2);border-radius:12px;padding:9px 14px;z-index:40;font-size:13px;max-width:92vw;display:none;box-shadow:0 10px 30px rgba(0,0,0,.4)}
+#viewer{position:fixed;inset:0;background:rgba(0,0,0,.94);z-index:45;display:none;align-items:center;justify-content:center;flex-direction:column;padding:10px}
+#viewer img{max-width:100%;max-height:86vh;border-radius:8px}
+.empty{text-align:center;padding:30px 10px;color:var(--fg3)}
+.skel{height:120px;border-radius:var(--r);background:linear-gradient(90deg,var(--bg2),var(--bg3),var(--bg2));background-size:200% 100%;animation:sk 1.2s infinite;margin-bottom:12px}
+@keyframes sk{to{background-position:-200% 0}}
 </style>
 </head>
 <body>
-<div id="setup">
-  <div class="card">
-    <h2>NSO Commander · Web</h2>
-    <div class="muted">Kết nối tới tool trên VPS. Địa chỉ lấy ở trang <b>Từ xa · Báo</b> của tool (hoặc gửi <b>/web</b> cho bot Telegram).</div>
-    <label>Địa chỉ máy chủ (https://….trycloudflare.com hoặc http://IP:8686)</label>
-    <input id="su" placeholder="https://xxxx.trycloudflare.com" autocomplete="off" autocapitalize="off">
-    <label>Mật khẩu trang web</label>
-    <input id="sk" type="password" autocomplete="current-password">
-    <div class="row" style="margin-top:12px"><button class="pri" id="sgo" style="flex:1">Kết nối</button></div>
-    <div id="serr" class="muted" style="color:var(--red);margin-top:8px"></div>
-  </div>
-</div>
 
 <header>
-  <span class="dot" id="hdot"></span>
-  <div class="brand">NSO <small id="htag"></small></div>
-  <div class="stats"><span id="hon">–</span><span id="hping">–</span><span id="hkb"></span></div>
-  <button class="sm" id="hset" title="Đổi máy chủ">⚙</button>
+  <button class="back" id="hback" hidden aria-label="Quay lại">‹</button>
+  <div class="logo" id="hlogo">N</div>
+  <button class="vpsbtn" id="vpsbtn"><span class="dot" id="hdot"></span><b id="hname">Chưa có VPS</b><span class="muted">▾</span></button>
+  <div class="hstats">
+    <span class="stat"><b id="hon">–</b> online</span>
+    <span class="stat wide"><b id="hping">–</b> ms</span>
+    <span class="stat wide" id="hkbw" hidden><b id="hkb">0</b> KB/s</span>
+  </div>
 </header>
 
 <main>
-  <section class="page on" id="p-nick">
-    <div class="card row" id="sysline" style="font-size:12px;color:var(--fg2)"></div>
-    <div class="btns" style="margin:0 0 10px">
+  <!-- TỔNG QUAN -->
+  <section class="page on" id="p-home">
+    <div class="hero" id="hero"></div>
+    <div class="row" style="margin-bottom:10px"><h3 class="grow">Các VPS</h3><button class="sm" id="hadd">＋ Thêm / quản lý VPS</button></div>
+    <div class="vgrid" id="vgrid"></div>
+  </section>
+
+  <!-- NICK -->
+  <section class="page" id="p-nick">
+    <div class="card row" id="sysline" style="font-size:12.5px;color:var(--fg2);gap:12px"></div>
+    <div class="toolbar">
       <button class="ok sm" data-cmd="/chay">▶ Chạy cả đội</button>
-      <button class="bad sm" data-cmd="/dung" data-confirm="DỪNG HẾT tất cả nick?">■ Dừng hết</button>
+      <button class="bad sm" data-cmd="/dung" data-confirm="DỪNG HẾT tất cả nick trên VPS này?">■ Dừng hết</button>
       <button class="sm" data-cmd="/goiquat">♦ Gọi Quạt</button>
       <button class="sm" data-cmd="/boss">🐉 Săn boss</button>
       <button class="sm" data-cmd="/ngu">😴 Ngủ/thức màn hình</button>
+      <button class="sm" data-cmd="/anh *">📷 Ảnh tất cả nick</button>
     </div>
-    <div class="list" id="nicks"></div>
+    <div class="ngrid" id="nicks"></div>
   </section>
 
+  <!-- MÀN HÌNH -->
   <section class="page" id="p-screen">
     <div class="tabsel" id="scrtabs"></div>
-    <div class="screenwrap" id="sw"><img id="scr" alt=""><div class="scrmsg" id="scrmsg">Chọn nick để xem màn hình</div></div>
-    <div class="row" style="margin-top:6px;font-size:12px;color:var(--fg2)">
-      <span id="sfps">–</span>
-      <select id="sq" style="width:auto;padding:5px 8px;font-size:12px">
-        <option value="40|2">Tiết kiệm</option><option value="60|4" selected>Vừa</option><option value="80|6">Nét</option>
-      </select>
-      <label class="row" style="gap:4px"><input type="checkbox" id="slong" style="width:auto"> Nhấn giữ</label>
-      <button class="sm" id="spause" style="margin-left:auto">⏸ Dừng xem</button>
-    </div>
-    <div class="pad">
-      <button data-k="soft1">◧ Trái</button><button data-k="up">▲</button><button data-k="soft2">Phải ◨</button>
-      <button data-k="left">◀</button><button data-k="ok" class="pri">OK</button><button data-k="right">▶</button>
-      <button data-k="clear">⌫ Xóa</button><button data-k="down">▼</button><button data-k="pound">#</button>
-      <button data-k="1">1</button><button data-k="2">2</button><button data-k="3">3</button>
-      <button data-k="4">4</button><button data-k="5">5</button><button data-k="6">6</button>
-      <button data-k="7">7</button><button data-k="8">8</button><button data-k="9">9</button>
-      <button data-k="star">*</button><button data-k="0">0</button><button data-k="pound">#</button>
-    </div>
-    <div class="card" style="margin-top:10px">
-      <div class="muted">Gõ chữ vào ô đang mở trong game</div>
-      <div class="row" style="margin-top:6px;flex-wrap:nowrap"><input id="stext" placeholder="chữ / số"><button id="stype">Gõ</button></div>
-      <div class="muted" style="margin-top:10px">Lệnh game (như gõ chat: upts, z, hs, tsn, adan, gm35…)</div>
-      <div class="row" style="margin-top:6px;flex-wrap:nowrap"><input id="sgame" placeholder="upts" autocapitalize="off"><button id="sgsend" class="pri">Gửi</button></div>
-      <div class="btns" id="gquick"></div>
+    <div class="emu">
+      <div>
+        <div class="screenwrap" id="sw">
+          <img id="scr" alt="">
+          <div class="scrmsg" id="scrmsg">Chọn nick để xem màn hình</div>
+          <div class="fsbar">
+            <button class="exit" id="fsexit">✕ Thoát</button>
+            <div class="dp"><span></span><button data-k="up">▲</button><span></span><button data-k="left">◀</button><button data-k="ok">●</button><button data-k="right">▶</button><span></span><button data-k="down">▼</button><span></span></div>
+            <div class="rt"><button data-k="soft1">L</button><button data-k="soft2">R</button><button data-k="clear">⌫</button><button data-k="ok">OK</button></div>
+          </div>
+        </div>
+        <div class="emustats">
+          <span class="stat">Độ trễ <b id="eping">–</b> ms</span>
+          <span class="stat"><b id="ekb">–</b> KB/s</span>
+          <span class="stat"><b id="efps">–</b> FPS</span>
+          <select id="sq" style="width:auto;padding:4px 8px;font-size:12px;border-radius:10px">
+            <option value="40|2">Tiết kiệm</option><option value="60|4" selected>Vừa</option><option value="80|6">Nét</option>
+          </select>
+          <button class="xs" id="spause">⏸ Dừng</button>
+          <button class="xs" id="sfull">⛶ Toàn màn hình</button>
+          <label class="row muted" style="gap:4px"><input type="checkbox" id="slong" style="width:auto"> nhấn giữ</label>
+        </div>
+      </div>
+      <div>
+        <div class="pad">
+          <button data-k="soft1">◧ Trái</button><button data-k="up">▲</button><button data-k="soft2">Phải ◨</button>
+          <button data-k="left">◀</button><button data-k="ok" class="okb">OK</button><button data-k="right">▶</button>
+          <button data-k="clear">⌫</button><button data-k="down">▼</button><button data-k="pound">#</button>
+          <button data-k="1">1</button><button data-k="2">2</button><button data-k="3">3</button>
+          <button data-k="4">4</button><button data-k="5">5</button><button data-k="6">6</button>
+          <button data-k="7">7</button><button data-k="8">8</button><button data-k="9">9</button>
+          <button data-k="star">*</button><button data-k="0">0</button><button data-k="pound">#</button>
+        </div>
+        <div class="card" style="margin-top:10px">
+          <div class="muted">Gõ chữ vào ô đang mở trong game</div>
+          <div class="row" style="margin-top:6px;flex-wrap:nowrap"><input id="stext" placeholder="chữ / số"><button id="stype">Gõ</button></div>
+          <div class="muted" style="margin-top:12px">Lệnh game cho nick đang xem</div>
+          <div class="row" style="margin-top:6px;flex-wrap:nowrap"><input id="sgame" placeholder="upts · z · hs · gm35" autocapitalize="off"><button id="sgsend" class="pri">Gửi</button></div>
+          <div class="btns" id="gquick"></div>
+        </div>
+      </div>
     </div>
   </section>
 
+  <!-- LỆNH -->
   <section class="page" id="p-cmd">
     <div class="menu" id="menu"></div>
     <div class="feed" id="cfeed"></div>
-    <div class="inbar"><input id="cin" placeholder="/tt  ·  /nick 2  ·  /lenh 2 tn  ·  /boss on 1" autocapitalize="off"><button class="pri" id="csend">Gửi</button></div>
+    <div class="inbar"><input id="cin" placeholder="/tt · /nick 2 · /lenh 2 tn · /boss on 1" autocapitalize="off"><button class="pri" id="csend">Gửi</button></div>
   </section>
 
+  <!-- BÁO -->
   <section class="page" id="p-alert">
-    <div class="row" style="margin-bottom:8px"><button class="sm" id="anotif">🔔 Bật thông báo trình duyệt</button><button class="sm" id="ashots">🖼 Tải ảnh boss</button></div>
-    <h3 style="margin:6px 0">Ảnh boss / nick chết</h3>
-    <div class="shots" id="shots"><div class="muted">Bấm "Tải ảnh boss".</div></div>
-    <h3 style="margin:14px 0 6px">Báo động</h3>
-    <div class="feed" id="afeed"></div>
-  </section>
-
-  <section class="page" id="p-log">
-    <div class="row" style="margin-bottom:8px;flex-wrap:nowrap">
-      <input id="lf" placeholder="lọc: tên nick, boss, ✗…">
-      <button class="sm" id="lerr">⚠ Lỗi</button><button class="sm" id="lref">↻</button>
+    <div class="seg" id="aseg"><button data-a="al" class="on">🔔 Báo động</button><button data-a="sh">🖼 Ảnh boss</button><button data-a="lg">📜 Nhật ký</button></div>
+    <div id="a-al">
+      <div class="row" style="margin-bottom:8px"><button class="sm" id="anotif">Bật thông báo trình duyệt</button><button class="sm" id="antfy">📱 Báo về điện thoại (app ntfy)</button><span class="muted">gộp báo động của mọi VPS</span></div>
+      <div class="feed" id="afeed"><div class="empty">Chưa có báo động.</div></div>
     </div>
-    <label class="row muted" style="margin-bottom:6px;gap:4px"><input type="checkbox" id="lauto" style="width:auto" checked> tự làm mới 5 giây</label>
-    <div class="log" id="log"></div>
+    <div id="a-sh" hidden><div class="row" style="margin-bottom:8px"><button class="sm" id="ashots">↻ Tải lại</button><span class="muted">VPS đang chọn · thư mục anh_boss</span></div><div class="shots" id="shots"></div></div>
+    <div id="a-lg" hidden>
+      <div class="row" style="margin-bottom:8px;flex-wrap:nowrap"><input id="lf" placeholder="lọc: tên nick, boss, ✗…"><button class="sm" id="lerr">⚠ Lỗi</button><button class="sm" id="lref">↻</button></div>
+      <label class="row muted" style="margin-bottom:6px;gap:4px"><input type="checkbox" id="lauto" style="width:auto" checked> tự làm mới 5 giây</label>
+      <div class="log" id="log"></div>
+    </div>
   </section>
 </main>
 
 <nav>
-  <button data-p="nick" class="on"><b>👥</b>Nick</button>
-  <button data-p="screen"><b>🖥</b>Màn hình</button>
-  <button data-p="cmd"><b>⌨</b>Lệnh</button>
-  <button data-p="alert"><b>🔔</b>Báo<span class="badge" id="abadge" hidden>0</span></button>
-  <button data-p="log"><b>📜</b>Nhật ký</button>
+  <button data-p="home" class="on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="9" rx="2"/><rect x="14" y="3" width="7" height="5" rx="2"/><rect x="14" y="12" width="7" height="9" rx="2"/><rect x="3" y="16" width="7" height="5" rx="2"/></svg>Tổng quan</button>
+  <button data-p="nick"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="8" r="4"/><path d="M2 21c0-4 3-6 7-6s7 2 7 6"/><path d="M16 4a4 4 0 0 1 0 8M22 21c0-3-2-5-4-5.6"/></svg>Nick</button>
+  <button data-p="screen"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="6" y="2" width="12" height="20" rx="3"/><path d="M10 18h4"/></svg>Màn hình</button>
+  <button data-p="cmd"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 17l6-5-6-5M12 19h8"/></svg>Lệnh</button>
+  <button data-p="alert"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 8a6 6 0 1 1 12 0c0 7 3 8 3 8H3s3-1 3-8M10 21h4"/></svg>Báo<span class="badge" id="abadge" hidden>0</span></button>
 </nav>
+
+<!-- quản lý VPS -->
+<div class="sheet" id="vsheet"><div class="box">
+  <div class="row"><h2 class="grow">VPS</h2><button class="xs ghost" id="vclose">✕</button></div>
+  <div class="muted" style="margin-top:4px">Cách nhanh nhất: trong tool bấm <b>Sao chép link</b> rồi mở link đó 1 lần — web tự nhớ mã đội + mật khẩu, lần sau vào thẳng. Mọi VPS cùng mã đội tự hiện ở đây (địa chỉ đổi cũng tự cập nhật).</div>
+  <div id="vlist"></div>
+  <label>Mã đội (ô "Mã đội" trong tool, dạng nso-xxxx)</label>
+  <input id="vteam" type="password" autocomplete="off">
+  <label>Mật khẩu trang web chung (dùng cho mọi VPS không đặt mật khẩu riêng)</label>
+  <input id="vkey" type="password" autocomplete="current-password">
+  <div class="row" style="margin-top:12px"><button class="pri grow" id="vsave">Lưu + kết nối</button></div>
+  <div id="vregmsg" class="muted" style="margin-top:8px"></div>
+  <details style="margin-top:14px"><summary>Thêm VPS bằng tay (không dùng mã đội)</summary>
+    <label>Tên VPS</label><input id="vn" placeholder="VPS 1">
+    <label>Địa chỉ (https://….trycloudflare.com hoặc http://IP:8686)</label><input id="vu" placeholder="https://xxxx.trycloudflare.com" autocapitalize="off">
+    <label>Mật khẩu riêng (trống = dùng mật khẩu chung)</label><input id="vp" type="password">
+    <div class="row" style="margin-top:10px"><button class="grow" id="vadd">＋ Thêm</button></div>
+  </details>
+</div></div>
+
 <div class="toast" id="toast"></div>
-<div id="viewer"><img id="vimg" alt=""><button style="margin-top:10px" id="vclose">Đóng</button></div>
+<div id="viewer"><img id="vimg" alt=""><button style="margin-top:10px" id="vclose2">Đóng</button></div>
 
 <script>
 "use strict";
 const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
-const store = {
-  get(k, d) { try { const v = localStorage.getItem("nso." + k); return v == null ? d : v; } catch (e) { return d; } },
-  set(k, v) { try { localStorage.setItem("nso." + k, v); } catch (e) {} }
+const LS = {
+  get(k, d) { try { const v = localStorage.getItem("nso2." + k); return v == null ? d : v; } catch (e) { return d; } },
+  set(k, v) { try { localStorage.setItem("nso2." + k, v); } catch (e) {} }
 };
-let SERVER = "", KEY = "", state = null, page = "nick", screenTab = -1, live = false, lastFeed = 0, unread = 0, firstFeed = true;
-let pingMs = 0, bytesWin = [], viewing = -1;
+const sleep = ms => new Promise(r => setTimeout(r, ms));
+const esc = s => String(s == null ? "" : s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[c]));
+const hhmm = ms => new Date(ms).toLocaleTimeString("vi-VN", {hour:"2-digit", minute:"2-digit", second:"2-digit"});
+const num = s => { const n = parseInt(String(s || "").replace(/[^\d-]/g, ""), 10); return isNaN(n) ? 0 : n; };
+const money = n => { n = Number(n) || 0; return n >= 1e9 ? (n/1e9).toFixed(2) + "B" : n >= 1e6 ? (n/1e6).toFixed(1) + "M" : n >= 1e3 ? Math.round(n/1e3) + "k" : String(n); };
+function toast(t, ms) { const e = $("#toast"); e.textContent = t; e.style.display = "block"; clearTimeout(toast.t); toast.t = setTimeout(() => e.style.display = "none", ms || 2600); }
 
-// ── cấu hình máy chủ: #s=… (link tool gửi) > đã lưu > chính trang của tool ──
-(function initServer() {
+// ═════════ danh sách VPS ═════════
+// s = {id, name, url, key, src:"reg"|"manual", st, ok, err, ping, lastFeed, at}
+let servers = [];
+let curId = LS.get("cur", "");
+let teamKey = LS.get("team", ""), sharedKey = LS.get("key", "");
+const isTool = !/vercel\.app$|github\.io$|netlify\.app$|pages\.dev$/.test(location.hostname) && location.protocol.startsWith("http") && !location.hostname.endsWith(".local");
+const NTFY = "https://ntfy.sh";
+try { servers = JSON.parse(LS.get("servers", "[]")).map(s => Object.assign(s, { st: null, ok: null, lastFeed: 0 })); } catch (e) { servers = []; }
+const saveServers = () => LS.set("servers", JSON.stringify(servers.map(({id, name, url, key, src}) => ({id, name, url, key, src}))));
+const cur = () => servers.find(s => s.id === curId) || servers[0] || null;
+const keyOf = s => s.key || sharedKey;
+function upsert(name, url, src) {
+  let s = servers.find(x => x.name === name) || servers.find(x => x.url === url);
+  if (s) { if (s.url !== url) { s.url = url; s.ok = null; s.lastFeed = 0; } s.name = name; if (src === "reg") s.src = "reg"; }
+  else { s = { id: "v" + Date.now().toString(36) + Math.random().toString(36).slice(2, 6), name, url, key: "", src, st: null, ok: null, lastFeed: 0 }; servers.push(s); }
+  saveServers();
+  return s;
+}
+// link tool gửi: #t=<mã đội>&k=<mật khẩu>&s=<địa chỉ>&n=<tên VPS> → mở 1 lần là nhớ, lần sau khỏi đăng nhập
+(function fromHash() {
   const h = new URLSearchParams(location.hash.slice(1));
-  if (h.get("s")) { store.set("server", h.get("s")); history.replaceState(null, "", location.pathname); }
-  SERVER = store.get("server", "");
-  if (!SERVER && !/vercel\.app$|github\.io$|netlify\.app$/.test(location.hostname) && location.protocol.startsWith("http")) SERVER = location.origin;
-  KEY = store.get("key", "");
+  if (h.get("t")) { teamKey = h.get("t"); LS.set("team", teamKey); }
+  if (h.get("k")) { sharedKey = h.get("k"); LS.set("key", sharedKey); }
+  if ((h.get("t") || h.get("k")) && !h.get("s")) history.replaceState(null, "", location.pathname);
+  if (h.get("s")) { const s = upsert(h.get("n") || "VPS", h.get("s").replace(/\/+$/, ""), "manual"); curId = s.id; LS.set("cur", curId); history.replaceState(null, "", location.pathname); }
+  if (isTool && !servers.some(s => s.url === location.origin)) upsert("VPS này", location.origin, "manual");
 })();
 
-function toast(t, ms) { const e = $("#toast"); e.textContent = t; e.style.display = "block"; clearTimeout(toast.t); toast.t = setTimeout(() => e.style.display = "none", ms || 2500); }
-function esc(s) { return String(s == null ? "" : s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[c])); }
-function hhmm(ms) { const d = new Date(ms); return d.toLocaleTimeString("vi-VN", {hour:"2-digit", minute:"2-digit", second:"2-digit"}); }
-function num(s) { const n = parseInt(String(s || "").replace(/[^\d-]/g, ""), 10); return isNaN(n) ? 0 : n; }
-function money(n) { n = Number(n) || 0; return n >= 1e9 ? (n/1e9).toFixed(2) + "B" : n >= 1e6 ? (n/1e6).toFixed(1) + "M" : n >= 1e3 ? Math.round(n/1e3) + "k" : String(n); }
+// Mỗi tool báo {tên, địa chỉ, phiên bản} lên kênh đội ntfy.sh 10 phút 1 lần → web đọc tin 12 giờ gần nhất, lấy tin mới nhất của từng VPS.
+async function loadRegistry(showErr) {
+  if (!teamKey) return;
+  try {
+    const r = await fetch(`${NTFY}/${encodeURIComponent(teamKey)}/json?poll=1&since=12h`, { cache: "no-store" });
+    if (!r.ok) throw new Error("HTTP " + r.status);
+    const latest = {};
+    for (const line of (await r.text()).split("\n")) {
+      if (!line.trim()) continue;
+      try {
+        const ev = JSON.parse(line); if (ev.event !== "message") continue;
+        const v = JSON.parse(ev.message); if (!v.nso || !v.name || !/^https:\/\//.test(v.url)) continue;
+        if (!latest[v.name] || latest[v.name].at < v.at) latest[v.name] = v;
+      } catch (e) {}
+    }
+    const list = Object.values(latest);
+    list.forEach(v => { const s = upsert(v.name, v.url, "reg"); s.at = v.at; s.version = v.version; });
+    $("#vregmsg").textContent = list.length ? "✓ Kênh đội có " + list.length + " VPS · " + hhmm(Date.now()) : "Kênh đội chưa có VPS nào báo (tool v6.4 đã bật trang web + đúng mã đội?)";
+    if (showErr && !list.length) toast("Kênh đội chưa có VPS nào báo lên", 4000);
+    if (!curId && servers[0]) curId = servers[0].id;
+  } catch (e) { $("#vregmsg").textContent = "Không đọc được kênh đội: " + e.message; }
+}
 
-async function api(path, opt) {
+// ═════════ gọi API của 1 VPS ═════════
+let bytesWin = [];
+async function api(s, path, opt) {
   opt = opt || {};
+  if (!s) throw new Error("chưa chọn VPS");
   const t0 = performance.now();
-  const init = { method: opt.body ? "POST" : "GET", headers: { "X-Key": KEY }, cache: "no-store" };
+  const init = { method: opt.body ? "POST" : "GET", headers: { "X-Key": keyOf(s) }, cache: "no-store" };
   if (opt.body) { init.headers["Content-Type"] = "application/x-www-form-urlencoded"; init.body = new URLSearchParams(opt.body).toString(); }
-  if (opt.signal) init.signal = opt.signal;
-  const r = await fetch(SERVER + path, init);
-  if (r.status === 401) { showSetup("Sai mật khẩu."); throw new Error("sai mật khẩu"); }
-  if (!opt.long) pingMs = Math.round(performance.now() - t0);
+  let r;
+  try { r = await fetch(s.url + path, init); }
+  catch (e) { s.ok = false; s.err = location.protocol === "https:" && s.url.startsWith("http:") ? "trang https không gọi được http:// — dùng địa chỉ trycloudflare" : "không tới được (tool tắt / địa chỉ cũ)"; throw new Error(s.err); }
+  if (!opt.long) s.ping = Math.round(performance.now() - t0);
+  if (r.status === 401) { s.ok = false; s.err = "sai mật khẩu"; throw new Error("sai mật khẩu " + s.name); }
   if (opt.blob) { if (!r.ok) throw new Error((await r.json().catch(() => ({}))).error || ("HTTP " + r.status)); const b = await r.blob(); bytesWin.push([Date.now(), b.size]); return b; }
   const j = await r.json().catch(() => ({}));
   if (!r.ok) throw new Error(j.error || ("HTTP " + r.status));
   return j;
 }
-const cmd = text => api("/api/cmd", { body: { text } }).then(() => toast("✓ " + text)).catch(e => toast("✗ " + e.message, 4000));
+const cmdOn = (s, text) => api(s, "/api/cmd", { body: { text } }).then(() => toast("✓ " + s.name + ": " + text)).catch(e => toast("✗ " + e.message, 4000));
 
-// ── đăng nhập ──
-function showSetup(err) { $("#setup").style.display = "flex"; $("#su").value = SERVER; $("#sk").value = KEY; $("#serr").textContent = err || ""; }
-$("#hset").onclick = () => showSetup("");
-$("#sgo").onclick = async () => {
-  SERVER = $("#su").value.trim().replace(/\/+$/, ""); KEY = $("#sk").value;
-  if (!/^https?:\/\//.test(SERVER)) { $("#serr").textContent = "Địa chỉ phải bắt đầu bằng https:// hoặc http://"; return; }
-  if (location.protocol === "https:" && SERVER.startsWith("http:")) { $("#serr").textContent = "Trang https (Vercel) không gọi được địa chỉ http:// — dùng địa chỉ https://….trycloudflare.com, hoặc mở thẳng http://IP:cổng."; return; }
-  try { const j = await api("/api/ping"); store.set("server", SERVER); store.set("key", KEY); $("#setup").style.display = "none"; toast("Đã kết nối " + j.tag + " · " + j.version); start(); }
-  catch (e) { $("#serr").textContent = "Không kết nối được: " + e.message + " (tool đã bật trang web? địa chỉ đường hầm mới nhất?)"; }
-};
+async function pollState(s) {
+  try { s.st = await api(s, "/api/state"); s.ok = true; s.err = ""; }
+  catch (e) { s.ok = false; s.err = s.err || e.message; }
+}
 
-// ── điều hướng ──
+// ═════════ điều hướng ═════════
+let page = "home";
 $$("nav button").forEach(b => b.onclick = () => go(b.dataset.p));
-function go(p) {
+$("#hback").onclick = () => { if (history.state && history.state.p && history.state.p !== "home") history.back(); else go("home"); };
+window.addEventListener("popstate", e => {
+  if ($("#viewer").style.display === "flex") { $("#viewer").style.display = "none"; return; }
+  if ($("#vsheet").classList.contains("on")) { $("#vsheet").classList.remove("on"); return; }
+  if (document.fullscreenElement) { document.exitFullscreen(); return; }
+  go(e.state && e.state.p || "home", true);
+});
+history.replaceState({ p: "home" }, "", location.pathname);
+function go(p, fromPop) {
+  if (!fromPop && p !== page) history.pushState({ p }, "", "#" + p);
   page = p;
+  $("#hback").hidden = p === "home"; $("#hlogo").hidden = p !== "home";
   $$("nav button").forEach(b => b.classList.toggle("on", b.dataset.p === p));
-  $$(".page").forEach(s => s.classList.toggle("on", s.id === "p-" + p));
-  if (p === "alert") { unread = 0; badge(); }
-  if (p === "screen") { live = screenTab >= 0; liveLoop(); } else live = false;
-  if (p === "log") loadLog();
+  $$(".page").forEach(x => x.classList.toggle("on", x.id === "p-" + p));
+  if (p === "alert") { unread = 0; badge(); if (aTab === "sh") loadShots(); if (aTab === "lg") loadLog(); }
+  if (p === "screen") liveLoop();
+  if (p === "home") renderHome();
+  if (p === "nick") renderNick();
   window.scrollTo(0, 0);
 }
-function badge() { const b = $("#abadge"); b.hidden = unread === 0; b.textContent = unread; }
 document.addEventListener("click", e => {
   const b = e.target.closest("[data-cmd]"); if (!b) return;
   if (b.dataset.confirm && !confirm(b.dataset.confirm)) return;
-  cmd(b.dataset.cmd);
+  const s = b.dataset.vps ? servers.find(x => x.id === b.dataset.vps) : cur();
+  cmdOn(s, b.dataset.cmd);
 });
+function pick(id, to) { curId = id; LS.set("cur", id); const s = cur(); screenTab = -1; feedRestart(); renderHeader(); if (to) go(to); else { renderNick(); } if (s) pollState(s).then(renderAll); }
 
-// ── trạng thái nick ──
-async function pollState() {
-  try {
-    state = await api("/api/state");
-    viewing = state.viewing;
-    $("#hdot").className = "dot g";
-    renderState();
-  } catch (e) { $("#hdot").className = "dot r"; $("#hping").textContent = "mất kết nối"; }
+// ═════════ header ═════════
+function renderHeader() {
+  const s = cur();
+  $("#hname").textContent = s ? s.name : "Chưa có VPS";
+  $("#hdot").className = "dot " + (!s ? "" : s.ok ? "g" : s.ok === false ? "r" : "y");
+  const st = s && s.st;
+  $("#hon").textContent = st ? st.tabs.filter(t => t.inGame).length + "/" + st.tabs.length : "–";
+  $("#hping").textContent = s && s.ping ? s.ping : "–";
 }
-function renderState() {
-  const s = state; if (!s) return;
-  $("#htag").textContent = s.tag + " · " + s.version;
-  const on = s.tabs.filter(t => t.inGame).length;
-  $("#hon").textContent = on + "/" + s.tabs.length + " online";
-  $("#hping").textContent = pingMs + " ms";
-  $("#sysline").innerHTML = `<span>RAM ${esc(s.ram)}</span><span>CPU ${esc(s.cpu)}</span>${s.sleep ? '<span class="chip">màn hình đang ngủ</span>' : ''}${s.teamBusy ? '<span class="chip">đội đang chạy việc</span>' : ''}<span>${s.simple ? "chế độ đơn giản" : "chế độ đầy đủ"}</span><span>Telegram: ${esc(s.tg)}</span>`;
-  const list = $("#nicks");
-  const open = new Set($$("#nicks details[open]").map(d => d.dataset.i));
-  list.innerHTML = s.tabs.map(t => nickCard(t, open.has(String(t.i)))).join("");
-  // chọn tab màn hình
-  $("#scrtabs").innerHTML = s.tabs.filter(t => t.open).map(t => `<button class="sm ${t.i === screenTab ? "on" : ""}" data-st="${t.i}">${t.inGame ? "🟢" : t.inWorld ? "🟡" : "🔴"} ${t.i + 1} ${esc(t.nick)}</button>`).join("") || '<span class="muted">Chưa có tab nào đang mở.</span>';
-  $$("#scrtabs [data-st]").forEach(b => b.onclick = () => pickScreen(+b.dataset.st));
+$("#vpsbtn").onclick = openSheet;
+$("#hadd").onclick = openSheet;
+
+// ═════════ tổng quan ═════════
+function renderHome() {
+  let vOk = 0, nIn = 0, nAll = 0, yh = 0, dead = 0, drop = 0;
+  servers.forEach(s => { if (s.ok) vOk++; if (s.st) s.st.tabs.forEach(t => { nAll++; if (t.inGame) nIn++; yh += t.yenH || 0; dead += t.dead || 0; drop += t.drop || 0; }); });
+  $("#hero").innerHTML = [
+    [vOk + "/" + servers.length, "VPS kết nối"], [nIn + "/" + nAll, "nick trong game"], [money(yh), "yên/giờ (tổng)"], [dead + " · " + drop, "chết · rớt hôm nay"]
+  ].map(([v, l]) => `<div class="card"><div class="v">${v}</div><div class="l">${l}</div></div>`).join("");
+  if (!servers.length) { $("#vgrid").innerHTML = `<div class="card empty">Chưa có VPS nào.<br><br><button class="pri" onclick="openSheet()">＋ Thêm VPS / nhập mã đội</button></div>`; return; }
+  $("#vgrid").innerHTML = servers.map(s => {
+    const st = s.st, dot = s.ok ? "g" : s.ok === false ? "r" : "y";
+    const rows = st ? st.tabs.map(t => `<span class="dot ${t.inGame ? "g" : t.inWorld ? "y" : "r"}"></span>
+        <span class="n"><b>${t.i + 1}. ${esc(t.nick || "(trống)")}</b> <span class="chip ${esc(t.role)}">${esc(t.roleLabel)}</span>
+        <span class="muted">${t.lv ? "Lv " + esc(t.lv) + " · map " + esc(t.map) + "/" + esc(t.zone) : esc(t.state)}</span></span>
+        <span style="width:70px">${t.hp ? bar(t.hpP, "var(--red)") : ""}</span>`).join("") : "";
+    return `<div class="card">
+      <div class="row"><span class="dot ${dot}"></span><b class="grow" style="font-size:15px">${esc(s.name)}</b>
+        ${st ? `<span class="chip ${latestVer && st.version !== latestVer ? "red" : ""}">${esc(st.version)}${latestVer && st.version !== latestVer ? " → " + esc(latestVer) : ""}</span>` : ""}<span class="chip">${s.ping ? s.ping + " ms" : "–"}</span></div>
+      ${st ? `<div class="muted" style="margin-top:4px">RAM ${esc(st.ram)} · CPU ${esc(st.cpu)}${st.sleep ? " · màn hình ngủ" : ""} · ${st.tabs.filter(t => t.inGame).length}/${st.tabs.length} trong game · ${money(st.tabs.reduce((a, t) => a + (t.yenH || 0), 0))}/giờ</div>
+        <div class="mini">${rows}</div>`
+      : `<div class="muted" style="margin-top:6px;color:var(--red)">${esc(s.err || "đang kết nối…")}</div><div class="muted">${esc(s.url)}</div>`}
+      <div class="btns">
+        <button class="sm pri" onclick="pick('${s.id}','nick')">Mở</button>
+        <button class="sm" onclick="pick('${s.id}','screen')">🖥 Màn hình</button>
+        <button class="sm ok" data-vps="${s.id}" data-cmd="/chay">▶ Chạy</button>
+        <button class="sm bad" data-vps="${s.id}" data-cmd="/dung" data-confirm="DỪNG HẾT trên ${esc(s.name)}?">■ Dừng</button>
+        ${st ? `<button class="sm ${latestVer && st.version !== latestVer ? "pri" : ""}" data-vps="${s.id}" data-cmd="/capnhat ngay" data-confirm="Cập nhật ${esc(s.name)} ngay?${latestVer ? " (bản mới nhất: " + esc(latestVer) + ")" : ""}\nCó bản mới thì tool tải + khởi động lại, mọi nick vào lại và chạy lại auto như cũ.">⬆ Cập nhật</button>` : ""}
+      </div>${st && st.upd ? `<div class="muted" style="margin-top:6px">⬆ ${esc(st.upd)}</div>` : ""}</div>`;
+  }).join("");
 }
+
+// bản mới nhất đặt trên chính trang này (update/manifest.json)
+let latestVer = "";
+async function loadLatest() { try { const r = await fetch("update/manifest.json?t=" + Date.now(), { cache: "no-store" }); if (r.ok) latestVer = (await r.json()).version || ""; } catch (e) {} }
+
+// ═════════ nick ═════════
 function bar(p, c) { p = Math.max(0, Math.min(100, p || 0)); return `<div class="bar"><i style="width:${p}%;background:${c}"></i></div>`; }
+function renderNick() {
+  const s = cur(), st = s && s.st;
+  if (!s) { $("#nicks").innerHTML = '<div class="card empty">Chưa có VPS.</div>'; $("#sysline").innerHTML = ""; return; }
+  if (!st) { $("#nicks").innerHTML = s.ok === false ? `<div class="card empty">✗ ${esc(s.err)}<br><span class="muted">${esc(s.url)}</span></div>` : '<div class="skel"></div><div class="skel"></div>'; return; }
+  $("#sysline").innerHTML = `<b>${esc(st.tag)}</b><span>${esc(st.version)}</span><span>RAM ${esc(st.ram)}</span><span>CPU ${esc(st.cpu)}</span>${st.sleep ? '<span class="chip">màn hình ngủ</span>' : ""}${st.teamBusy ? '<span class="chip">đội đang chạy việc</span>' : ""}<span>${st.simple ? "chế độ đơn giản" : "chế độ đầy đủ"}</span><span>Telegram: ${esc(st.tg || "tắt")}</span>`;
+  const open = new Set($$("#nicks details[open]").map(d => d.dataset.i));
+  $("#nicks").innerHTML = st.tabs.map(t => nickCard(t, open.has(String(t.i)))).join("") || '<div class="card empty">VPS này chưa có nick.</div>';
+}
 function nickCard(t, open) {
-  const n = t.i + 1, dot = t.inGame ? "g" : t.inWorld ? "y" : "r";
-  const b = t.boss || null;
+  const n = t.i + 1, dot = t.inGame ? "g" : t.inWorld ? "y" : "r", b = t.boss;
   const bossLine = b ? `<span>Săn boss</span><span>${b.hunt ? "🐉 " + esc(b.st) : b.want ? "BẬT · chờ thông báo" : "tắt"}${b.ev ? '<br><span class="muted">' + esc(b.ev) + "</span>" : ""}${b.item ? '<br><span class="muted">🎒 ' + esc(b.item) + "</span>" : ""}</span>` : "";
   const bag = t.bag ? `<details data-i="${t.i}" ${open ? "open" : ""}><summary>🎒 Hành trang · ${esc(t.bag[0])}</summary><div class="bag">${t.bag.slice(1).map(x => "<div>" + esc(x) + "</div>").join("") || "trống"}</div></details>` : "";
   return `<div class="card">
-    <div class="row"><span class="dot ${dot}"></span><b>${n}. ${esc(t.nick || "(trống)")}</b><span class="chip ${esc(t.role)}">${esc(t.roleLabel)}</span>
-      ${t.pkam ? '<span class="chip" style="color:var(--red)">PK âm</span>' : ""}<span class="muted" style="margin-left:auto">${esc(t.server)}</span></div>
-    <div class="muted" style="margin-top:4px">${esc(t.state)}</div>
-    ${t.hp ? `<div class="row" style="margin-top:6px;flex-wrap:nowrap"><span class="muted" style="width:22px">HP</span>${bar(t.hpP, "var(--red)")}<span class="muted">${t.hpP}%</span></div>
-    <div class="row" style="flex-wrap:nowrap"><span class="muted" style="width:22px">MP</span>${bar(t.mpP, "var(--cyan)")}<span class="muted">${t.mpP}%</span></div>` : ""}
+    <div class="row" style="flex-wrap:nowrap"><div class="ava ${esc(t.role)}">${n}</div>
+      <div class="grow"><div class="row" style="gap:6px"><b style="font-size:15px">${esc(t.nick || "(trống)")}</b><span class="chip ${esc(t.role)}">${esc(t.roleLabel)}</span>${t.pkam ? '<span class="chip red">PK âm</span>' : ""}</div>
+      <div class="row muted" style="gap:6px"><span class="dot ${dot}"></span>${esc(t.state)}</div></div>
+      <span class="muted" style="text-align:right;font-size:11.5px">${esc(t.server)}</span></div>
+    ${t.hp ? `<div class="row" style="margin-top:10px;flex-wrap:nowrap"><span class="muted" style="width:24px">HP</span>${bar(t.hpP, "linear-gradient(90deg,#f43f5e,#fb7185)")}<span class="muted" style="width:36px;text-align:right">${t.hpP}%</span></div>
+    <div class="row" style="flex-wrap:nowrap;margin-top:4px"><span class="muted" style="width:24px">MP</span>${bar(t.mpP, "linear-gradient(90deg,#0ea5e9,#38d3f5)")}<span class="muted" style="width:36px;text-align:right">${t.mpP}%</span></div>` : ""}
     <div class="kv">
       ${t.lv ? `<span>Lv · Map</span><span>${esc(t.lv)} · map ${esc(t.map)} khu ${esc(t.zone)}</span>` : ""}
       ${t.yen ? `<span>Yên</span><span>${money(num(t.yen))}${t.yenH ? " · " + money(t.yenH) + "/giờ" : ""}${num(t.yen) >= 1999000000 ? ' <span style="color:var(--yellow)">⚠ gần trần 2 tỷ</span>' : ""}</span>` : ""}
@@ -305,72 +486,77 @@ function nickCard(t, open) {
       <button class="sm" data-cmd="/batauto ${n}">▶ Bật auto</button>
       <button class="sm" data-cmd="/pkam ${n} ${t.pkam ? "off" : "on"}">⚔ PK âm ${t.pkam ? "→ tắt" : "→ bật"}</button>
       ${b ? `<button class="sm" data-cmd="/boss ${b.want ? "off" : "on"} ${n}">🐉 ${b.want ? "Tắt" : "Bật"} săn boss</button><button class="sm" data-cmd="/boss do ${n}">🔎 Dò boss</button>` : ""}
-    </div>
-  </div>`;
+    </div></div>`;
 }
 
-// ── màn hình trực tiếp ──
+// ═════════ màn hình trực tiếp ═════════
 const scr = $("#scr");
-let curUrl = null, frames = [], paused = false;
+let screenTab = -1, paused = false, curUrl = null, frames = [];
+function renderScreenTabs() {
+  const st = cur() && cur().st;
+  $("#scrtabs").innerHTML = st ? (st.tabs.filter(t => t.open).map(t => `<button class="sm ${t.i === screenTab ? "on" : ""}" onclick="pickScreen(${t.i})"><span class="dot ${t.inGame ? "g" : t.inWorld ? "y" : "r"}"></span> ${t.i + 1}. ${esc(t.nick)}</button>`).join("") || '<span class="muted">Chưa có tab nào đang mở.</span>') : '<span class="muted">Đang tải…</span>';
+}
 function pickScreen(i) {
-  screenTab = i; paused = false; $("#spause").textContent = "⏸ Dừng xem";
+  screenTab = i; paused = false; $("#spause").textContent = "⏸ Dừng";
   $("#scrmsg").textContent = "Đang chuyển emulator sang nick " + (i + 1) + "…"; $("#scrmsg").style.display = "flex";
-  renderState(); live = page === "screen"; liveLoop();
+  renderScreenTabs(); liveLoop();
 }
 async function liveLoop() {
   if (liveLoop.run) return; liveLoop.run = true;
   try {
-    while (live && !paused && screenTab >= 0 && !document.hidden) {
-      const [q, fps] = $("#sq").value.split("|").map(Number);
-      const t0 = Date.now();
+    while (page === "screen" && !paused && screenTab >= 0 && !document.hidden) {
+      const s = cur(), [q, fps] = $("#sq").value.split("|").map(Number), t0 = Date.now();
       try {
-        const b = await api(`/api/screen?tab=${screenTab}&q=${q}`, { blob: true });
-        const u = URL.createObjectURL(b);
-        scr.src = u; if (curUrl) URL.revokeObjectURL(curUrl); curUrl = u;
+        const b = await api(s, `/api/screen?tab=${screenTab}&q=${q}`, { blob: true });
+        const u = URL.createObjectURL(b); scr.src = u; if (curUrl) URL.revokeObjectURL(curUrl); curUrl = u;
         $("#scrmsg").style.display = "none";
         frames.push(Date.now()); frames = frames.filter(x => Date.now() - x < 3000);
-        $("#sfps").textContent = (frames.length / 3).toFixed(1) + " khung/giây · " + Math.round(b.size / 1024) + " KB";
+        $("#efps").textContent = (frames.length / 3).toFixed(1); $("#eping").textContent = Date.now() - t0;
       } catch (e) { $("#scrmsg").textContent = "✗ " + e.message; $("#scrmsg").style.display = "flex"; await sleep(2000); }
       const wait = 1000 / fps - (Date.now() - t0);
       if (wait > 0) await sleep(wait);
     }
   } finally { liveLoop.run = false; }
 }
-const sleep = ms => new Promise(r => setTimeout(r, ms));
-document.addEventListener("visibilitychange", () => { if (!document.hidden && page === "screen") liveLoop(); if (!document.hidden) pollState(); });
-$("#spause").onclick = () => { paused = !paused; $("#spause").textContent = paused ? "▶ Xem tiếp" : "⏸ Dừng xem"; if (!paused) liveLoop(); };
+document.addEventListener("visibilitychange", () => { if (!document.hidden) { if (page === "screen") liveLoop(); tick(); } });
+$("#spause").onclick = () => { paused = !paused; $("#spause").textContent = paused ? "▶ Xem tiếp" : "⏸ Dừng"; if (!paused) liveLoop(); };
+$("#sfull").onclick = () => { const w = $("#sw"); (w.requestFullscreen || w.webkitRequestFullscreen || (() => toast("Trình duyệt không hỗ trợ"))).call(w); try { screen.orientation.lock("landscape").catch(() => {}); } catch (e) {} };
+$("#fsexit").onclick = () => { (document.exitFullscreen || document.webkitExitFullscreen).call(document); };
 let pressT = 0;
 scr.addEventListener("pointerdown", () => pressT = Date.now());
 scr.addEventListener("contextmenu", e => e.preventDefault());
 scr.addEventListener("pointerup", e => {
   if (screenTab < 0 || !scr.naturalWidth) return;
   const r = scr.getBoundingClientRect();
-  const x = Math.round((e.clientX - r.left) * scr.naturalWidth / r.width), y = Math.round((e.clientY - r.top) * scr.naturalHeight / r.height);
+  // ảnh có thể co theo object-fit: tính vùng ảnh thật trong khung
+  const k = Math.min(r.width / scr.naturalWidth, r.height / scr.naturalHeight), w = scr.naturalWidth * k, h = scr.naturalHeight * k;
+  const ox = r.left + (r.width - w) / 2, oy = r.top + (r.height - h) / 2;
+  const x = Math.round((e.clientX - ox) / k), y = Math.round((e.clientY - oy) / k);
+  if (x < 0 || y < 0 || x > scr.naturalWidth || y > scr.naturalHeight) return;
   const lp = $("#slong").checked || Date.now() - pressT > 600;
-  const fx = document.createElement("div"); fx.className = "tapfx"; fx.style.left = (e.clientX - r.left) + "px"; fx.style.top = (e.clientY - r.top) + "px";
-  $("#sw").appendChild(fx); setTimeout(() => fx.remove(), 500);
-  api("/api/tap", { body: { tab: screenTab, x, y, long: lp ? 1 : 0 } }).catch(er => toast("✗ " + er.message));
+  const wr = $("#sw").getBoundingClientRect(), fx = document.createElement("div"); fx.className = "tapfx";
+  fx.style.left = (e.clientX - wr.left) + "px"; fx.style.top = (e.clientY - wr.top) + "px"; $("#sw").appendChild(fx); setTimeout(() => fx.remove(), 500);
+  api(cur(), "/api/tap", { body: { tab: screenTab, x, y, long: lp ? 1 : 0 } }).catch(er => toast("✗ " + er.message));
 });
-$$(".pad [data-k]").forEach(b => b.onclick = () => key(b.dataset.k));
-function key(k) { if (screenTab < 0) return toast("Chọn nick trước"); api("/api/key", { body: { tab: screenTab, key: k } }).catch(e => toast("✗ " + e.message)); }
+$$("[data-k]").forEach(b => b.onclick = () => key(b.dataset.k));
+function key(k) { if (screenTab < 0) return toast("Chọn nick trước"); if (navigator.vibrate) navigator.vibrate(12); api(cur(), "/api/key", { body: { tab: screenTab, key: k } }).catch(e => toast("✗ " + e.message)); }
 $("#stype").onclick = () => { const v = $("#stext").value; if (v) { key("text:" + v); $("#stext").value = ""; } };
 $("#sgsend").onclick = () => gameCmd($("#sgame").value);
 $("#sgame").addEventListener("keydown", e => { if (e.key === "Enter") gameCmd($("#sgame").value); });
 function gameCmd(v) {
   v = (v || "").trim(); if (!v) return; if (screenTab < 0) return toast("Chọn nick trước");
-  api("/api/chat", { body: { tab: screenTab, text: v } }).then(() => { toast("✓ " + v); $("#sgame").value = ""; }).catch(e => toast("✗ " + e.message, 4000));
+  api(cur(), "/api/chat", { body: { tab: screenTab, text: v } }).then(() => { toast("✓ " + v); $("#sgame").value = ""; }).catch(e => toast("✗ " + e.message, 4000));
 }
-$("#gquick").innerHTML = [["upts","Up tàn sát"],["z","Dừng auto"],["hs","Hồi sinh"],["tsn","Tàn sát nhanh"],["adan","Đan (bật/tắt)"],["tn","Tìm nhóm"]]
-  .map(([c, l]) => `<button class="sm" data-g="${c}">${l} <span class="muted">${c}</span></button>`).join("");
-$$("#gquick [data-g]").forEach(b => b.onclick = () => gameCmd(b.dataset.g));
+$("#gquick").innerHTML = [["upts","Up tàn sát"],["z","Dừng auto"],["hs","Hồi sinh"],["tsn","Tàn sát nhanh"],["adan","Đan bật/tắt"],["tn","Tìm nhóm"]]
+  .map(([c, l]) => `<button class="xs" onclick="gameCmd('${c}')">${l} <span class="muted">${c}</span></button>`).join("");
 window.addEventListener("keydown", e => {
   if (page !== "screen" || e.target.tagName === "INPUT") return;
   const m = { ArrowUp: "up", ArrowDown: "down", ArrowLeft: "left", ArrowRight: "right", Enter: "ok", Backspace: "clear", F1: "soft1", F2: "soft2" };
   if (m[e.key]) { key(m[e.key]); e.preventDefault(); } else if (/^[0-9*#]$/.test(e.key)) key(e.key === "*" ? "star" : e.key === "#" ? "pound" : e.key);
 });
 
-// ── lệnh (như Telegram) ──
-const MENU = [["📋 Trạng thái","/tt"],["👤 Từng nick","/nick"],["▶ Chạy cả đội","/chay"],["■ DỪNG HẾT","/dung"],["📷 Ảnh emulator","/anh"],["📷 Ảnh tất cả nick","/anh *"],
+// ═════════ lệnh ═════════
+const MENU = [["📋 Trạng thái","/tt"],["👤 Từng nick","/nick"],["▶ Chạy cả đội","/chay"],["■ DỪNG HẾT","/dung"],["📷 Ảnh emulator","/anh"],["📷 Ảnh tất cả","/anh *"],
   ["♦ Gọi Quạt","/goiquat"],["📜 Kịch bản","/kb"],["⏰ Hẹn giờ","/hengio"],["🔔 Luật tự động","/luat"],["📊 Báo cáo","/baocao"],["⚠ Lỗi gần đây","/loi"],
   ["💾 Lưu hiện trạng","/luu"],["↺ Khôi phục","/khoiphuc"],["🐉 Săn boss","/boss"],["🖥 VPS","/vps"],["🌐 Proxy","/proxy"],["🔁 Khởi động lại","/khoidonglai"],["❓ Tất cả lệnh","/giup"]];
 $("#menu").innerHTML = MENU.map(([l, c]) => `<button data-c="${esc(c)}">${l}</button>`).join("");
@@ -379,88 +565,163 @@ $("#csend").onclick = () => sendCmd($("#cin").value);
 $("#cin").addEventListener("keydown", e => { if (e.key === "Enter") sendCmd($("#cin").value); });
 function sendCmd(t) {
   t = (t || "").trim(); if (!t) return;
-  if (/^\/?(dung|khoidonglai)\b/.test(t) && !confirm("Chắc chắn: " + t + " ?")) return;
+  if (/^\/?(dung|khoidonglai)\b/.test(t) && !confirm("Chắc chắn: " + t + " trên " + (cur() ? cur().name : "") + "?")) return;
   addMsg($("#cfeed"), { kind: "me", text: t, at: Date.now() }); $("#cin").value = "";
-  api("/api/cmd", { body: { text: t } }).catch(e => addMsg($("#cfeed"), { kind: "msg", text: "✗ " + e.message, at: Date.now() }));
+  api(cur(), "/api/cmd", { body: { text: t } }).catch(e => addMsg($("#cfeed"), { kind: "msg", text: "✗ " + e.message, at: Date.now() }));
 }
-function addMsg(box, it) {
+function addMsg(box, it, s) {
+  const empty = box.querySelector(".empty"); if (empty) empty.remove();
   const d = document.createElement("div");
   d.className = "msg " + (it.kind === "alert" ? "alert" : it.kind === "me" ? "me" : "");
-  d.innerHTML = `<time>${hhmm(it.at)}</time>${esc(it.text)}`;
-  if (it.img) { const im = document.createElement("img"); d.appendChild(im); api("/api/img?id=" + it.img, { blob: true }).then(b => { im.src = URL.createObjectURL(b); im.onclick = () => view(im.src); }).catch(() => im.remove()); }
+  d.innerHTML = `<time>${s ? "<b>" + esc(s.name) + "</b> · " : ""}${hhmm(it.at)}</time>${esc(it.text)}`;
+  if (it.img && s) { const im = document.createElement("img"); d.appendChild(im); api(s, "/api/img?id=" + it.img, { blob: true }).then(b => { im.src = URL.createObjectURL(b); im.onclick = () => view(im.src); }).catch(() => im.remove()); }
   if (it.kb) it.kb.forEach(row => {
     const r = document.createElement("div"); r.className = "kbrow";
     row.forEach(([l, c]) => { const b = document.createElement("button"); b.textContent = l; b.onclick = () => sendCmd(c); r.appendChild(b); });
     d.appendChild(r);
   });
   box.prepend(d);
-  while (box.children.length > 120) box.lastChild.remove();
+  while (box.children.length > 150) box.lastChild.remove();
 }
 function view(src) { $("#vimg").src = src; $("#viewer").style.display = "flex"; }
-$("#vclose").onclick = () => $("#viewer").style.display = "none";
+$("#vclose2").onclick = () => $("#viewer").style.display = "none";
 
-// ── bảng tin (long-poll) ──
-async function feedLoop() {
-  if (feedLoop.run) return; feedLoop.run = true;
-  while (true) {
+// ═════════ bảng tin: VPS đang chọn đọc liên tục, VPS khác 20 giây 1 lần ═════════
+let unread = 0, feedGen = 0;
+const badge = () => { const b = $("#abadge"); b.hidden = unread === 0; b.textContent = unread > 99 ? "99+" : unread; };
+function handleItems(s, items, first) {
+  for (const it of items) {
+    if (it.kind === "alert") {
+      addMsg($("#afeed"), it, s);
+      if (!first) { if (page !== "alert") { unread++; badge(); } notify(s.name + ": " + it.text); }
+    } else if (s === cur() && !first) addMsg($("#cfeed"), it, null);
+    else if (s === cur() && first && it.kind !== "alert") addMsg($("#cfeed"), it, null);
+  }
+}
+function feedRestart() { feedGen++; $("#cfeed").innerHTML = ""; feedLoop(feedGen); }
+async function feedLoop(gen) {
+  const s = cur(); if (!s) return;
+  let first = !s.feedInit;
+  while (gen === feedGen) {
     try {
-      const j = await api(`/api/feed?after=${lastFeed}&wait=${firstFeed ? 0 : 20}`, { long: true });
-      for (const it of j.items) {
-        if (it.kind === "alert") {
-          addMsg($("#afeed"), it);
-          if (!firstFeed) { if (page !== "alert") { unread++; badge(); } notify(it.text); if (/📸/.test(it.text)) setTimeout(loadShots, 6000); }
-        } else addMsg($("#cfeed"), it);
-      }
-      lastFeed = j.last; firstFeed = false;
+      const j = await api(s, `/api/feed?after=${s.lastFeed || 0}&wait=${first ? 0 : 20}`, { long: true });
+      if (gen !== feedGen) return;
+      handleItems(s, j.items, first); s.lastFeed = j.last; s.feedInit = true; first = false;
     } catch (e) { await sleep(5000); }
   }
 }
-function notify(t) {
-  try { if (document.hidden && "Notification" in window && Notification.permission === "granted") new Notification("NSO", { body: t.slice(0, 200) }); } catch (e) {}
+async function otherFeeds() {
+  for (const s of servers) {
+    if (s === cur() || !s.ok) continue;
+    try { const first = !s.feedInit; const j = await api(s, `/api/feed?after=${s.lastFeed || 0}&wait=0`, { long: true }); handleItems(s, j.items.filter(i => i.kind === "alert"), first); s.lastFeed = j.last; s.feedInit = true; } catch (e) {}
+  }
 }
-$("#anotif").onclick = () => { if ("Notification" in window) Notification.requestPermission().then(p => toast(p === "granted" ? "Đã bật (chỉ báo khi trang còn mở)" : "Trình duyệt không cho phép")); else toast("Trình duyệt không hỗ trợ"); };
+function notify(t) { try { if (document.hidden && "Notification" in window && Notification.permission === "granted") new Notification("NSO", { body: t.slice(0, 200), icon: "icon.svg" }); } catch (e) {} }
+$("#antfy").onclick = () => {
+  if (!teamKey) return toast("Chưa có mã đội");
+  const topic = teamKey + "-bao";
+  if (navigator.clipboard) navigator.clipboard.writeText(topic).catch(() => {});
+  alert("1) Cài app ntfy (Android/iPhone).\n2) Bấm + → Subscribe → nhập kênh:\n\n" + topic + "\n\n(đã chép kênh)\n3) Trong tool tích \"Gửi báo động lên app ntfy\" → Lưu.\nĐiện thoại sẽ báo rớt mạng, chết, boss… kể cả khi không mở web.");
+};
+$("#anotif").onclick = () => { if ("Notification" in window) Notification.requestPermission().then(p => toast(p === "granted" ? "Đã bật (báo khi trang còn mở)" : "Trình duyệt không cho phép")); else toast("Trình duyệt không hỗ trợ"); };
 
-// ── ảnh boss ──
+// ═════════ Báo: ảnh boss, nhật ký ═════════
+let aTab = "al";
+$$("#aseg button").forEach(b => b.onclick = () => {
+  aTab = b.dataset.a; $$("#aseg button").forEach(x => x.classList.toggle("on", x === b));
+  ["al", "sh", "lg"].forEach(k => $("#a-" + k).hidden = k !== aTab);
+  if (aTab === "sh") loadShots(); if (aTab === "lg") loadLog();
+});
 $("#ashots").onclick = loadShots;
 async function loadShots() {
+  const box = $("#shots");
   try {
-    const j = await api("/api/shots");
-    const box = $("#shots");
-    if (!j.shots.length) { box.innerHTML = '<div class="muted">Chưa có ảnh (bật "Chụp màn hình khi boss vừa hết" ở trang Săn boss của tool).</div>'; return; }
-    box.innerHTML = j.shots.slice(0, 40).map(s => `<figure><img data-f="${esc(s.f)}" alt=""><figcaption>${esc(s.f.replace(/\.png$/, "").replace("/", " "))}</figcaption></figure>`).join("");
-    $$("#shots img").forEach(im => api("/api/shot?f=" + encodeURIComponent(im.dataset.f), { blob: true }).then(b => { im.src = URL.createObjectURL(b); im.onclick = () => view(im.src); }).catch(() => {}));
-  } catch (e) { toast("✗ " + e.message); }
+    const s = cur(), j = await api(s, "/api/shots");
+    if (!j.shots.length) { box.innerHTML = '<div class="empty">Chưa có ảnh — bật "Chụp màn hình khi boss vừa hết" ở trang Săn boss của tool.</div>'; return; }
+    box.innerHTML = j.shots.slice(0, 40).map(x => `<figure><img data-f="${esc(x.f)}" alt=""><figcaption>${esc(x.f.replace(/\.png$/, "").replace("/", " · "))}</figcaption></figure>`).join("");
+    $$("#shots img").forEach(im => api(s, "/api/shot?f=" + encodeURIComponent(im.dataset.f), { blob: true }).then(b => { im.src = URL.createObjectURL(b); im.onclick = () => view(im.src); }).catch(() => {}));
+  } catch (e) { box.innerHTML = `<div class="empty">✗ ${esc(e.message)}</div>`; }
 }
-
-// ── nhật ký ──
 let errOnly = false;
 $("#lerr").onclick = () => { errOnly = !errOnly; $("#lerr").classList.toggle("bad", errOnly); loadLog(); };
 $("#lref").onclick = loadLog;
 $("#lf").addEventListener("input", () => { clearTimeout(loadLog.t); loadLog.t = setTimeout(loadLog, 400); });
 async function loadLog() {
   try {
-    const f = errOnly ? "!err" : $("#lf").value;
-    const j = await api("/api/log?n=400&f=" + encodeURIComponent(f));
+    const j = await api(cur(), "/api/log?n=400&f=" + encodeURIComponent(errOnly ? "!err" : $("#lf").value));
     const el = $("#log"), atBottom = el.scrollTop + el.clientHeight >= el.scrollHeight - 30;
     el.innerHTML = j.lines.map(l => `<div class="${/✗/.test(l) ? "e" : /⚠/.test(l) ? "w" : ""}">${esc(l)}</div>`).join("") || '<span class="muted">Trống</span>';
     if (atBottom) el.scrollTop = el.scrollHeight;
-  } catch (e) {}
+  } catch (e) { $("#log").textContent = "✗ " + e.message; }
 }
 
-// ── vòng chạy ──
-let started = false;
-function start() {
-  if (started) return; started = true;
-  pollState(); feedLoop();
-  setInterval(() => { if (!document.hidden) pollState(); }, 3000);
-  setInterval(() => { if (page === "log" && $("#lauto").checked && !document.hidden) loadLog(); }, 5000);
-  setInterval(() => {
-    bytesWin = bytesWin.filter(x => Date.now() - x[0] < 5000);
-    const kb = bytesWin.reduce((a, x) => a + x[1], 0) / 5 / 1024;
-    $("#hkb").textContent = kb > 0.5 ? kb.toFixed(0) + " KB/s" : "";
-  }, 1000);
+// ═════════ quản lý VPS ═════════
+function openSheet() {
+  $("#vteam").value = teamKey; $("#vkey").value = sharedKey;
+  renderVlist(); $("#vsheet").classList.add("on");
 }
-if (!SERVER || !KEY) showSetup(""); else api("/api/ping").then(() => start()).catch(e => showSetup("Không kết nối được: " + e.message));
+function renderVlist() {
+  $("#vlist").innerHTML = servers.map(s => `<div class="vitem ${s.id === curId ? "on" : ""}" data-id="${s.id}">
+    <span class="dot ${s.ok ? "g" : s.ok === false ? "r" : "y"}"></span>
+    <div class="grow"><b>${esc(s.name)}</b> <span class="chip">${s.src === "reg" ? "tự động" : "tay"}</span>
+      <div class="muted" style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(s.url)}${s.err ? " · " + esc(s.err) : ""}</div></div>
+    <button class="xs" data-act="key">🔑</button><button class="xs bad" data-act="del">✕</button></div>`).join("") || '<div class="empty">Chưa có VPS.</div>';
+  $$("#vlist .vitem").forEach(el => el.onclick = e => {
+    const s = servers.find(x => x.id === el.dataset.id), act = e.target.dataset.act;
+    if (act === "del") { if (confirm("Bỏ " + s.name + " khỏi danh sách trên máy này?")) { servers = servers.filter(x => x !== s); saveServers(); if (curId === s.id) curId = servers[0] ? servers[0].id : ""; renderVlist(); renderAll(); } return; }
+    if (act === "key") { const k = prompt("Mật khẩu riêng cho " + s.name + " (trống = dùng mật khẩu chung)", s.key || ""); if (k != null) { s.key = k; saveServers(); pollState(s).then(renderAll); } return; }
+    $("#vsheet").classList.remove("on"); pick(s.id, page === "home" ? "nick" : page);
+  });
+}
+$("#vclose").onclick = () => $("#vsheet").classList.remove("on");
+$("#vsave").onclick = async () => {
+  teamKey = $("#vteam").value.trim(); sharedKey = $("#vkey").value; LS.set("team", teamKey); LS.set("key", sharedKey);
+  await loadRegistry(true);
+  await Promise.all(servers.map(pollState));
+  renderVlist(); renderAll(); if (!curId && servers[0]) pick(servers[0].id);
+  const bad = servers.filter(s => !s.ok);
+  toast(bad.length ? "✗ " + bad.map(s => s.name + ": " + s.err).join(" · ") : "✓ Đã kết nối " + servers.length + " VPS", 5000);
+  if (!bad.length) $("#vsheet").classList.remove("on");
+  feedRestart();
+};
+$("#vadd").onclick = async () => {
+  const n = $("#vn").value.trim() || "VPS " + (servers.length + 1), u = $("#vu").value.trim().replace(/\/+$/, "");
+  if (!/^https?:\/\//.test(u)) return toast("Địa chỉ phải bắt đầu bằng https:// hoặc http://");
+  const s = upsert(n, u, "manual"); s.key = $("#vp").value; saveServers();
+  $("#vn").value = $("#vu").value = $("#vp").value = "";
+  await pollState(s); renderVlist(); renderAll(); if (!curId) pick(s.id);
+};
+
+// ═════════ vòng chạy ═════════
+function renderAll() { renderHeader(); if (page === "home") renderHome(); if (page === "nick") renderNick(); if (page === "screen") renderScreenTabs(); }
+let tickN = 0;
+async function tick() {
+  if (document.hidden) return;
+  tickN++;
+  const s = cur();
+  if (page === "home") await Promise.all(servers.map(pollState));
+  else { if (s) await pollState(s); if (tickN % 5 === 0) await Promise.all(servers.filter(x => x !== s).map(pollState)); }
+  renderAll();
+}
+setInterval(tick, 3500);
+setInterval(() => { if (!document.hidden) otherFeeds(); }, 20000);
+setInterval(() => { if (!document.hidden) { loadRegistry(false); loadLatest(); } }, 300000);
+setInterval(() => { if (page === "alert" && aTab === "lg" && $("#lauto").checked && !document.hidden) loadLog(); }, 5000);
+setInterval(() => {
+  bytesWin = bytesWin.filter(x => Date.now() - x[0] < 5000);
+  const kb = bytesWin.reduce((a, x) => a + x[1], 0) / 5 / 1024;
+  $("#hkbw").hidden = kb < 0.5; $("#hkb").textContent = kb.toFixed(0); $("#ekb").textContent = kb.toFixed(0);
+}, 1000);
+
+(async function boot() {
+  renderAll(); loadLatest();
+  if (!sharedKey && !servers.some(s => s.key)) { openSheet(); if (teamKey) loadRegistry(false).then(renderVlist); return; }
+  await loadRegistry(false);
+  if (!curId && servers[0]) curId = servers[0].id;
+  await Promise.all(servers.map(pollState));
+  renderAll(); feedRestart();
+  if (!servers.length) openSheet();
+})();
 </script>
 </body>
 </html>
