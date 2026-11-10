@@ -177,6 +177,29 @@ details summary::before{content:"▸ ";color:var(--fg3)}details[open] summary::b
 #p-set #sbody{padding-bottom:6px}
 #p-set .sbar button{white-space:nowrap;font-size:13.5px;padding:11px 6px}
 #p-set .sbar{position:sticky;bottom:calc(66px + env(safe-area-inset-bottom));display:grid;grid-template-columns:1.6fr 1fr 1fr;gap:8px;padding:10px;margin:0 -2px;background:rgba(246,242,236,.96);border-radius:16px;border:1px solid var(--ln);z-index:4}
+/* ═══ Boss ═══ */
+.bnext{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px;margin-bottom:10px}
+.bnext .card{margin:0;padding:10px}
+.bnext .v{font-size:20px;font-weight:700}
+.bday{font-weight:700;color:var(--fg2);margin:14px 0 6px;font-size:13px}
+.bev{display:grid;grid-template-columns:22px 1fr;gap:8px;padding:8px 10px;border:1px solid var(--line);border-radius:12px;background:var(--bg2);margin-bottom:6px;font-size:13px}
+.bev .i{font-size:15px;line-height:1.2}
+.bev .m{color:var(--fg3);font-size:11.5px}
+.bev.done{border-color:rgba(52,211,153,.4)}.bev.death{border-color:rgba(251,113,133,.5)}.bev.gone{border-color:rgba(91,140,255,.45)}
+.bev .loot{margin-top:4px;color:#a7f3d0}.bev .loot.none{color:#fda4af}
+.bev .th{display:flex;gap:6px;margin-top:6px;flex-wrap:wrap}.bev .th img{width:120px;border-radius:8px;cursor:zoom-in;background:#000;min-height:60px}
+#csheet .grp{display:flex;flex-wrap:wrap;gap:6px}
+#csheet .grp label,#csheet .tg2 label{display:flex;align-items:center;gap:6px;background:var(--bg2);border:1px solid var(--line);border-radius:10px;padding:7px 10px;font-size:13px}
+#csheet input[type=checkbox]{width:auto}
+#csheet .tg2{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:6px}
+#csheet details.cg{background:var(--bg2);border:1px solid var(--line);border-radius:10px;margin-bottom:6px}
+#csheet details.cg summary{display:flex;align-items:center;gap:8px;padding:8px 10px;font-size:13px;cursor:pointer;list-style:none}
+#csheet details.cg summary::-webkit-details-marker{display:none}
+#csheet details.cg small{color:var(--fg3);white-space:nowrap}
+#csheet .cgi{display:flex;flex-wrap:wrap;gap:6px;padding:0 10px 10px}
+#csheet .cgi label{display:flex;align-items:center;gap:6px;border:1px solid var(--line);border-radius:8px;padding:5px 8px;font-size:12.5px}
+#csheet .cgi b{color:#a5b4fc;font-weight:600}
+#csheet .res{font-size:12.5px;margin-top:8px;white-space:pre-wrap}
 /* sheet */
 .sheet{position:fixed;inset:0;z-index:30;background:rgba(5,8,18,.7);backdrop-filter:blur(4px);display:none;align-items:flex-end;justify-content:center}
 .sheet.on{display:flex}
@@ -292,6 +315,13 @@ details summary::before{content:"▸ ";color:var(--fg3)}details[open] summary::b
           <div><label class="fl">Mật khẩu</label><input data-k="pass" type="password" placeholder="để trống = giữ" autocomplete="new-password"></div>
           <div><label class="fl">Tên nhân vật</label><input data-k="nick" autocomplete="off" autocapitalize="off"></div>
         </div>
+        <div class="btns"><button class="sbtn r" id="sreset" title="Xoá tài khoản + cài đặt tool của tab này để cài nick mới">🗑 Reset nick này</button><button class="sbtn" id="sresetm">🗑 Reset nhiều tab…</button></div>
+        <div class="hint">Reset = xoá tài khoản, tên nhân vật, vai trò, map/khu/skill, săn boss của tab trong tool để cài nick mới (dừng auto nick cũ).</div>
+      </div>
+      <div class="scard">
+        <h4>Chép cài đặt / Mẫu <small>áp nhanh cho nhiều nick, nhiều VPS</small></h4>
+        <div class="btns" style="margin-top:0"><button class="sbtn o" id="scopy">📋 Chép sang nick khác…</button></div>
+        <div id="stpl" style="margin-top:8px"></div>
       </div>
       <div class="stabs" id="stabs"></div>
       <div id="sbody"></div>
@@ -312,10 +342,20 @@ details summary::before{content:"▸ ";color:var(--fg3)}details[open] summary::b
 
   <!-- BÁO -->
   <section class="page" id="p-alert">
-    <div class="seg" id="aseg"><button data-a="al" class="on">🔔 Báo động</button><button data-a="sh">🖼 Ảnh boss</button><button data-a="lg">📜 Nhật ký</button></div>
+    <div class="seg" id="aseg"><button data-a="bo">🐉 Boss</button><button data-a="al" class="on">🔔 Báo động</button><button data-a="sh">🖼 Ảnh boss</button><button data-a="lg">📜 Nhật ký</button></div>
     <div id="a-al">
       <div class="row" style="margin-bottom:8px"><button class="sm" id="anotif">Bật thông báo trình duyệt</button><button class="sm" id="antfy">📱 Báo về điện thoại (app ntfy)</button><span class="muted">gộp báo động của mọi VPS</span></div>
       <div class="feed" id="afeed"><div class="empty">Chưa có báo động.</div></div>
+    </div>
+    <div id="a-bo" hidden>
+      <div class="bnext" id="bnext"></div>
+      <div class="row" style="margin-bottom:6px">
+        <select id="bday" style="width:auto;padding:6px 10px"><option value="1">Hôm nay</option><option value="2">2 ngày</option><option value="7" selected>7 ngày</option><option value="31">30 ngày</option></select>
+        <label class="row muted" style="gap:4px"><input type="checkbox" id="bimp" style="width:auto" checked> chỉ việc chính</label>
+        <label class="row muted" style="gap:4px"><input type="checkbox" id="ball" style="width:auto" checked> mọi VPS</label>
+        <button class="sm" id="bref">↻</button>
+      </div>
+      <div id="blist"><div class="empty">Đang tải…</div></div>
     </div>
     <div id="a-sh" hidden><div class="row" style="margin-bottom:8px"><button class="sm" id="ashots">↻ Tải lại</button><span class="muted">VPS đang chọn · thư mục anh_boss</span></div><div class="shots" id="shots"></div></div>
     <div id="a-lg" hidden>
@@ -354,6 +394,19 @@ details summary::before{content:"▸ ";color:var(--fg3)}details[open] summary::b
   </details>
 </div></div>
 
+<div class="sheet" id="csheet"><div class="box">
+  <div class="row"><h2 class="grow" id="cptitle" style="font-size:17px">Chép cài đặt</h2><button class="xs ghost" id="cpclose">✕</button></div>
+  <div class="muted" style="margin:6px 0 10px">Chép công tắc/số, PK âm, săn boss và form gốc (Buff, PK, Lọc đồ, Đập đồ…). Ghi lần lượt từng nick. Mẫu lưu trên trình duyệt này.</div>
+  <b style="font-size:13px">Công tắc / số <small class="muted">(bấm ▾ để chọn từng mục)</small></b>
+  <div id="cpgrp" style="margin:6px 0 12px"></div>
+  <b style="font-size:13px">Form gốc trong game</b>
+  <div class="muted" id="cpfhint" style="font-size:12px;margin-top:2px"></div>
+  <div class="grp" id="cpform" style="margin:6px 0 12px"></div>
+  <div class="row"><b class="grow" style="font-size:13px">Nick nhận</b><button class="xs" id="cpallt">Chọn tất cả</button></div>
+  <div class="tg2" id="cptg" style="margin:6px 0 12px"></div>
+  <div class="row"><button class="pri grow" id="cpgo">Ghi vào game</button><button id="cpsave">💾 Lưu thành mẫu</button></div>
+  <div class="res" id="cpres"></div>
+</div></div>
 <div class="toast" id="toast"></div>
 <div id="viewer"><img id="vimg" alt=""><button style="margin-top:10px" id="vclose2">Đóng</button></div>
 
@@ -455,6 +508,7 @@ $("#hback").onclick = () => { if (history.state && history.state.p && history.st
 window.addEventListener("popstate", e => {
   if ($("#viewer").style.display === "flex") { $("#viewer").style.display = "none"; return; }
   if ($("#vsheet").classList.contains("on")) { $("#vsheet").classList.remove("on"); return; }
+  if ($("#csheet").classList.contains("on")) { $("#csheet").classList.remove("on"); return; }
   if (document.fullscreenElement) { document.exitFullscreen(); return; }
   go(e.state && e.state.p || "home", true);
 });
@@ -465,7 +519,7 @@ function go(p, fromPop) {
   $("#hback").hidden = p === "home"; $("#hlogo").hidden = p !== "home";
   $$("nav button").forEach(b => b.classList.toggle("on", b.dataset.p === p));
   $$(".page").forEach(x => x.classList.toggle("on", x.id === "p-" + p));
-  if (p === "alert") { unread = 0; badge(); if (aTab === "sh") loadShots(); if (aTab === "lg") loadLog(); }
+  if (p === "alert") { unread = 0; badge(); if (aTab === "sh") loadShots(); if (aTab === "lg") loadLog(); if (aTab === "bo") loadBoss(); }
   if (p === "screen") liveLoop();
   if (p === "home") renderHome();
   if (p === "nick") renderNick();
@@ -498,7 +552,8 @@ function renderHome() {
   servers.forEach(s => { if (s.ok) vOk++; if (s.st) s.st.tabs.forEach(t => { nAll++; if (t.inGame) nIn++; yh += t.yenH || 0; dead += t.dead || 0; drop += t.drop || 0; }); });
   $("#hero").innerHTML = [
     [vOk + "/" + servers.length, "VPS kết nối"], [nIn + "/" + nAll, "nick trong game"], [money(yh), "yên/giờ (tổng)"], [dead + " · " + drop, "chết · rớt hôm nay"]
-  ].map(([v, l]) => `<div class="card"><div class="v">${v}</div><div class="l">${l}</div></div>`).join("");
+  ].map(([v, l]) => `<div class="card"><div class="v">${v}</div><div class="l">${l}</div></div>`).join("")
+    + (bossNext ? `<div class="card" style="cursor:pointer;grid-column:1/-1" onclick="openBoss()"><div class="row"><div class="grow"><div class="v">🐉 ${hm(bossNext)} <span class="muted" style="font-size:13px">còn ${left(bossNext)}</span></div><div class="l">boss tiếp theo (giờ máy bạn) · ${esc(bossHunt || "chưa nick nào đang săn")}</div></div><span class="chip">Xem sổ săn boss ›</span></div></div>` : "");
   if (!servers.length) { $("#vgrid").innerHTML = `<div class="card empty">Chưa có VPS nào.<br><br><button class="pri" onclick="openSheet()">＋ Thêm VPS / nhập mã đội</button></div>`; return; }
   $("#vgrid").innerHTML = servers.map(s => {
     const st = s.st, dot = s.ok ? "g" : s.ok === false ? "r" : "y";
@@ -570,6 +625,7 @@ function nickCard(t, open) {
       <button class="sm" data-cmd="/tatauto ${n}">⏸ Tắt auto</button>
       <button class="sm" data-cmd="/batauto ${n}">▶ Bật auto</button>
       <button class="sm" data-cmd="/pkam ${n} ${t.pkam ? "off" : "on"}">⚔ PK âm ${t.pkam ? "→ tắt" : "→ bật"}</button>
+      <button class="sm" style="color:#fda4af" data-cmd="/reset ${n}" data-confirm="Reset tab ${n} (${esc(t.nick || "trống")})?\nXoá tài khoản, tên nhân vật, vai trò, map/khu/skill, săn boss… của tab này trong tool để cài nick mới. Auto của nick này sẽ dừng.">🗑 Reset nick</button>
       ${b ? `<button class="sm" data-cmd="/boss ${b.want ? "off" : "on"} ${n}">🐉 ${b.want ? "Tắt" : "Bật"} săn boss</button><button class="sm" data-cmd="/boss do ${n}">🔎 Dò boss</button>` : ""}
     </div></div>`;
 }
@@ -755,6 +811,7 @@ function fieldHtml(f) {
   return `<div><label class="fl">${esc(f.label)}${f.hint ? ` <small>${esc(f.hint)}</small>` : ""}</label>${inputHtml(f)}</div>`;
 }
 function renderSet() {
+  renderTpl();
   $$("#stabs button").forEach(b => b.classList.toggle("on", b.dataset.st === setSub));
   const o = setOrig || {};
   // tài khoản
@@ -807,6 +864,22 @@ $("#ssave").onclick = async () => {
   } catch (e) { note("✗ " + e.message); toast("✗ " + e.message, 5000); }
   finally { $("#ssave").disabled = false; }
 };
+$("#scopy").onclick = () => openCopy(null);
+async function doReset(list) {
+  try { await api(cur(), "/api/cmd", { body: { text: "/reset " + list } }); toast("✓ Đã reset tab " + list + " — nhập nick mới", 4000); }
+  catch (e) { return toast("✗ " + e.message, 5000); }
+  setTimeout(() => { pollState(cur()).then(renderAll); if (page === "set") setLoad(); }, 1500);
+}
+$("#sreset").onclick = () => {
+  const o = setOrig || {};
+  if (confirm(`Reset tab ${setTab + 1} (${o.nick || "trống"})?\nXoá tài khoản, tên nhân vật, vai trò, map/khu/skill, săn boss… của tab này trong tool để cài nick mới. Auto của nick này sẽ dừng.`)) doReset(setTab + 1);
+};
+$("#sresetm").onclick = () => {
+  const v = prompt("Reset những tab nào? (số tab, cách nhau dấu phẩy — vd 2,3,5)"); if (!v) return;
+  const l = v.split(/[\s,;]+/).map(Number).filter(n => n >= 1 && n <= 50);
+  if (!l.length) return toast("Nhập số tab, vd 2,3");
+  if (confirm("Reset tab " + l.join(", ") + "? Xoá tài khoản + cài đặt tool của các tab này.")) doReset(l.join(","));
+};
 $("#sstart").onclick = () => { const t = (setOrig || {}); cmdOn(cur(), (t.inWorld ? "/batauto " : "/vaolai ") + (setTab + 1)); };
 $("#sstop").onclick = () => { if (confirm("Tắt auto nick " + (setTab + 1) + "?")) cmdOn(cur(), "/tatauto " + (setTab + 1)); };
 
@@ -857,6 +930,206 @@ async function formAct(cmd) {
     const r = await api(cur(), "/api/form", { body: { tab: setTab, act: "do", token: f.token, cmd, values: JSON.stringify(values) } });
     setForm = { id, f: r }; renderForm(); toast(r.closed ? "✓ Game đã lưu" : "✓ Đã gửi");
   } catch (e) { toast("✗ " + e.message, 5000); }
+}
+
+// ═════════ SỔ SĂN BOSS ═════════
+let bossNext = 0, bossHunt = "";
+const hm = ms => new Date(ms).toLocaleTimeString("vi-VN", { hour: "2-digit", minute: "2-digit" });
+const left = ms => { let m = Math.max(0, Math.round((ms - Date.now()) / 60000)); return m >= 60 ? Math.floor(m / 60) + " giờ " + (m % 60) + " phút" : m + " phút"; };
+const dayKey = ms => new Date(ms).toLocaleDateString("vi-VN", { weekday: "short", day: "2-digit", month: "2-digit" });
+function openBoss() { go("alert"); $$("#aseg button").find(b => b.dataset.a === "bo").click(); }
+$("#bref").onclick = loadBoss; ["#bday", "#bimp", "#ball"].forEach(k => $(k).onchange = loadBoss);
+async function bossSummary() {
+  const s = cur(); if (!s || !s.ok) return;
+  try { const j = await api(s, "/api/boss"); bossNext = (j.next || [])[0] || 0; bossHunt = (j.hunting || []).map(h => h.nick + ": " + h.st).join(" · "); } catch (e) {}
+}
+async function loadBoss() {
+  const list = $("#blist"), days = +$("#bday").value, imp = $("#bimp").checked;
+  const srv = $("#ball").checked ? servers.filter(s => s.ok) : [cur()].filter(Boolean);
+  if (!srv.length) { list.innerHTML = '<div class="empty">Chưa kết nối VPS nào.</div>'; return; }
+  const evs = [], hunting = [];
+  let next = [], notice = "", noticeAt = 0, times = "";
+  await Promise.all(srv.map(async s => {
+    try {
+      const j = await api(s, "/api/boss");
+      const byId = {};
+      for (const l of j.lines) { if (l.id) { l.vps = s; l.shot = []; l.loot = null; byId[l.id] = l; evs.push(l); } }
+      for (const l of j.lines) if (l.ref && byId[l.ref]) { if (l.shot) byId[l.ref].shot.push(...l.shot); if (l.loot) byId[l.ref].loot = l.loot; }
+      (j.hunting || []).forEach(h => hunting.push(s.name + " · " + h.nick + ": " + h.st));
+      next = next.concat(j.next || []); times = j.times;
+      if (j.noticeAt > noticeAt) { noticeAt = j.noticeAt; notice = j.notice; }
+    } catch (e) { evs.push({ id: 0, at: Date.now(), type: "err", text: s.name + ": " + e.message, vps: s, shot: [] }); }
+  }));
+  next = [...new Set(next)].sort((a, b) => a - b);
+  bossNext = next[0] || 0;
+  $("#bnext").innerHTML = next.slice(0, 3).map(n => `<div class="card"><div class="v">${hm(n)}</div><div class="muted">còn ${left(n)} · ${new Date(n).toLocaleDateString("vi-VN", { day: "2-digit", month: "2-digit" })}</div></div>`).join("")
+    + `<div class="card" style="grid-column:1/-1"><div class="muted">Giờ boss (giờ VN): ${esc(times)} · hiện theo giờ máy bạn</div>
+       ${notice ? `<div style="margin-top:4px">📢 ${esc(notice)} <span class="muted">${noticeAt ? "· " + hhmm(noticeAt) : ""}</span></div>` : ""}
+       <div style="margin-top:4px">${hunting.length ? "🐉 Đang săn: " + hunting.map(esc).join(" · ") : '<span class="muted">Chưa nick nào đang săn</span>'}</div></div>`;
+  const from = Date.now() - days * 86400000;
+  const IMP = { notice: 1, start: 1, found: 1, gone: 1, death: 1, kill: 1, done: 1, err: 1 };
+  const show = evs.filter(e => e.at >= from && (!imp || IMP[e.type])).sort((a, b) => b.at - a.at).slice(0, 400);
+  if (!show.length) { list.innerHTML = '<div class="empty">Chưa có sự kiện săn boss trong khoảng này. Sổ bắt đầu ghi từ bản v6.6.</div>'; return; }
+  const ICON = { notice: "📢", start: "🐉", found: "👁", gone: "📸", death: "💀", kill: "✓", done: "🏁", item: "🎒", ev: "·", err: "✗" };
+  const NAME = { notice: "Thông báo boss", start: "Bắt đầu săn", found: "Thấy boss", gone: "Boss hết", death: "Chết lúc săn", kill: "Hạ boss", done: "Săn xong", item: "Đồ / đan", ev: "", err: "Lỗi" };
+  let html = "", lastDay = "";
+  for (const e of show) {
+    const d = dayKey(e.at);
+    if (d !== lastDay) { html += `<div class="bday">${d}</div>`; lastDay = d; }
+    const who = e.nick ? `<b>${esc(e.nick)}</b> · ` : "";
+    const where = e.map ? ` · map ${esc(e.map)} khu ${esc(e.zone)}` : "";
+    const loot = e.type === "done" ? (e.loot == null ? '<div class="loot muted">đang so túi đồ…</div>' : e.loot.length ? `<div class="loot">🎁 Nhặt được: ${e.loot.map(esc).join(", ")}</div>` : '<div class="loot none">Túi không có món mới</div>') : "";
+    const th = e.shot && e.shot.length ? `<div class="th">${e.shot.map(f => `<img data-v="${e.vps.id}" data-f="${esc(f)}" alt="">`).join("")}</div>` : "";
+    html += `<div class="bev ${e.type}"><div class="i">${ICON[e.type] || "·"}</div><div><div>${who}${NAME[e.type] ? "<b>" + NAME[e.type] + "</b> — " : ""}${esc(e.text)}</div>
+      <div class="m">${hhmm(e.at)}${where}${srv.length > 1 ? " · " + esc(e.vps.name) : ""}</div>${loot}${th}</div></div>`;
+  }
+  list.innerHTML = html;
+  $$("#blist img[data-f]").forEach(im => { const s = servers.find(x => x.id === im.dataset.v); api(s, "/api/shot?f=" + encodeURIComponent(im.dataset.f), { blob: true }).then(b => { im.src = URL.createObjectURL(b); im.onclick = () => view(im.src); }).catch(() => im.remove()); });
+}
+setInterval(() => { if (!document.hidden) { bossSummary(); if (page === "alert" && aTab === "bo") loadBoss(); } }, 60000);
+
+// ═════════ CHÉP CÀI ĐẶT / MẪU ═════════
+const CGROUPS = [
+  ["ho", "Hỗ trợ — HP/MP, dùng + mua thức ăn (cấp), remap, reconnect, tự sát", ["d3","n3","e3","o3","f3","p3","g3","n4","m4","d5","j4","c5"]],
+  ["dq", "Đánh quái — loại quái, TATL, nhóm, né PK, đan, phân thân, nhảy", ["f4","g4","h4","l4","k4","i4","dan","e5","jump"]],
+  ["nh", "Nhặt đồ — KC nhặt, yên, HP/MP, đá (cấp), luyện đá, trang bị, sách…", ["kcnhat","v4","o4","q4","p4","r4","x4","w4","z4","y4","b5","a5","f5"]],
+  ["kh", "Khác — TTTT/TTTC, cổ lệnh", ["g5","h5","e4","i5"]],
+  ["td", "Tốc độ + khoảng cách tàn sát", ["nextmap","tele","tele2","openall","kts"]],
+  ["pk", "PK âm + săn boss (bật/tắt cho nick)", ["pkam","boss"]],
+  ["sk", "Skill auto đánh — 5 ô skill (đọc thẳng từ game)", ["skill"]],
+  ["mt", "Chế độ auto (upts / ts / tsn / ak)", ["mode"]],
+  ["mk", "Map + khu (Phụ vẫn theo map Chính)", ["map","zones"]],
+];
+const CFORMS = [["buff","Auto buff"],["party","Nhóm"],["pk","PK (DS PK / KoPK, delay tele, HP remap)"],["filter","Lọc đồ"],["upgrade","Đập đồ (max nâng cấp, loại đồ…)"],["daily","Danh vọng"],["dungeon","Hang động"],["clone","Phân thân"],["edo","Up Edo"]];
+const CLABEL = { pkam: "PK âm + giữ Lv", boss: "Săn boss" };
+for (const secs of Object.values(SET_DEF)) for (const sec of secs) for (const f of (sec.f || [])) {
+  CLABEL[f.k] = f.label; if (f.extra) CLABEL[f.extra.k] = f.label.replace(/ — .*/, "") + " → " + (f.label.split(" — ")[1] || "giá trị");
+}
+CLABEL.skill = "ID 5 skill auto đánh";
+let cpSrc = null;
+function tplList() { try { return JSON.parse(LS.get("tpl", "[]")); } catch (e) { return []; } }
+function tplSave(l) { LS.set("tpl", JSON.stringify(l)); }
+function srcVal(o, k) { if (o.flags && k in o.flags) return o.flags[k]; if (o.speed && k in o.speed) return o.speed[k]; return o[k]; }
+const showV = v => v === true ? "✓" : v === false ? "✗" : v == null ? "—" : String(v);
+function openCopy(fromTpl) {
+  const o = setOrig; if (!o && !fromTpl) return toast("Chưa đọc được cài đặt nick này");
+  cpSrc = fromTpl ? { name: "mẫu \"" + fromTpl.name + "\"", vals: fromTpl.vals } : { name: "nick " + (setTab + 1) + " " + (o.nick || ""), src: o, s: cur(), t: setTab };
+  const get = k => cpSrc.vals ? cpSrc.vals[k] : srcVal(o, k);
+  $("#cptitle").textContent = "Chép cài đặt từ " + cpSrc.name;
+  $("#cpgrp").innerHTML = CGROUPS.map(([g, l, keys]) => {
+    const ks = keys.filter(k => get(k) !== undefined && get(k) !== null);
+    if (!ks.length) return "";
+    const def = g !== "mk" && g !== "pk";
+    return `<details class="cg"><summary><input type="checkbox" data-g="${g}" ${def ? "checked" : ""}><span class="grow">${esc(l)}</span><small>${ks.length} mục</small></summary>
+      <div class="cgi">${ks.map(k => `<label><input type="checkbox" data-k="${k}" data-pg="${g}" ${def ? "checked" : ""}>${esc(CLABEL[k] || k)} <b>${esc(showV(get(k)))}</b></label>`).join("")}</div></details>`;
+  }).join("");
+  const fl = CFORMS.filter(([id]) => !cpSrc.vals || cpSrc.vals["form:" + id]);
+  $("#cpform").innerHTML = fl.length ? fl.map(([id, l]) => `<label><input type="checkbox" data-f="${id}" ${cpSrc.vals ? "checked" : ""}>${esc(l)}</label>`).join("")
+    : '<div class="muted">Mẫu này không có form.</div>';
+  $("#cpfhint").textContent = cpSrc.vals ? "Form đã lưu trong mẫu — ghi vào form gốc của nick nhận rồi bấm Lưu."
+    : "Tool mở form gốc trên nick nguồn để đọc (nick phải đang trong game), rồi điền vào nick nhận và bấm Lưu của form.";
+  $$("#cpgrp [data-g]").forEach(c => c.onchange = () => $$(`#cpgrp [data-pg="${c.dataset.g}"]`).forEach(x => x.checked = c.checked));
+  $$("#cpgrp [data-k]").forEach(c => c.onchange = () => { const g = c.dataset.pg; $(`#cpgrp [data-g="${g}"]`).checked = $$(`#cpgrp [data-pg="${g}"]`).some(x => x.checked); });
+  $$("#cpgrp summary input").forEach(c => c.onclick = e => e.stopPropagation());
+  const rows = [];
+  for (const s of servers) {
+    if (!s.st) continue;
+    for (const t of s.st.tabs) {
+      if (!cpSrc.vals && s === cur() && t.i === setTab) continue;
+      rows.push(`<label><input type="checkbox" data-v="${s.id}" data-t="${t.i}">${servers.length > 1 ? esc(s.name) + " · " : ""}${t.i + 1}. ${esc(t.nick || "(trống)")} <span class="chip ${esc(t.role)}">${esc(t.roleLabel)}</span></label>`);
+    }
+  }
+  $("#cptg").innerHTML = rows.join("") || '<div class="muted">Không có nick nào khác.</div>';
+  $("#cpres").textContent = ""; $("#cpsave").hidden = !!cpSrc.vals;
+  $("#csheet").classList.add("on");
+}
+$("#cpclose").onclick = () => $("#csheet").classList.remove("on");
+$("#cpallt").onclick = () => { const all = $$("#cptg input"); const on = !all.every(x => x.checked); all.forEach(x => x.checked = on); };
+function cpValues() {
+  const out = {};
+  $$("#cpgrp [data-k]:checked").forEach(c => { const k = c.dataset.k; out[k] = cpSrc.vals ? cpSrc.vals[k] : srcVal(cpSrc.src, k); });
+  return out;
+}
+const cpForms = () => $$("#cpform [data-f]:checked").map(c => c.dataset.f);
+// đọc form gốc trên nick nguồn: mở → chụp giá trị → đóng (không bấm Lưu)
+async function captureForms(ids, log) {
+  const out = {};
+  for (const id of ids) {
+    if (cpSrc.vals) { out[id] = cpSrc.vals["form:" + id]; continue; }
+    log("… đọc form " + id + " trên nick nguồn");
+    try {
+      const f = await api(cpSrc.s, "/api/form", { body: { tab: cpSrc.t, id } });
+      if (f.kind === "form") out[id] = { title: f.title, items: f.items.map(it => ({ label: it.label, t: it.t, v: it.v, opts: it.opts, sel: it.sel })) };
+      else log("⚠ form " + id + " không phải dạng ô nhập — bỏ qua");
+    } catch (e) { log("✗ đọc form " + id + ": " + e.message); }
+    try { await api(cpSrc.s, "/api/form", { body: { tab: cpSrc.t, act: "close" } }); } catch (e) {}
+  }
+  return out;
+}
+function formValues(f, snap) {
+  const used = new Set();
+  return f.items.map((it, i) => {
+    let m = snap.items[i] && snap.items[i].label === it.label && snap.items[i].t === it.t && !used.has(i) ? i : snap.items.findIndex((x, j) => !used.has(j) && x.label === it.label && x.t === it.t);
+    if (m < 0) return null; used.add(m); const s = snap.items[m];
+    if (it.t === "text" || it.t === "gauge") return s.v;
+    if (it.t === "multi" || it.t === "one") return it.opts.map((o, k) => { const j = (s.opts || []).indexOf(o); return j >= 0 ? !!s.sel[j] : !!(s.sel || [])[k]; });
+    return null;
+  });
+}
+async function applyForm(s, t, id, snap) {
+  const f = await api(s, "/api/form", { body: { tab: t, id } });
+  try {
+    if (f.kind !== "form") throw new Error("form khác dạng");
+    const cmd = (f.cmds || []).findIndex(c => /lưu|save|ok|xong|đồng ý|áp dụng/i.test(c));
+    if (cmd < 0) throw new Error("form không có nút Lưu");
+    const r = await api(s, "/api/form", { body: { tab: t, act: "do", token: f.token, cmd, values: JSON.stringify(formValues(f, snap)) } });
+    if (!r.closed) await api(s, "/api/form", { body: { tab: t, act: "close" } }).catch(() => {});
+  } catch (e) { await api(s, "/api/form", { body: { tab: t, act: "close" } }).catch(() => {}); throw e; }
+}
+$("#cpsave").onclick = async () => {
+  const vals = cpValues(), fids = cpForms();
+  if (!Object.keys(vals).length && !fids.length) return toast("Chọn ít nhất 1 mục");
+  const name = prompt("Tên mẫu (vd Up thường, Săn boss, Buff)"); if (!name) return;
+  const lines = []; const log = x => { lines.push(x); $("#cpres").textContent = lines.join("\n"); };
+  const forms = await captureForms(fids, log);
+  for (const [id, v] of Object.entries(forms)) if (v) vals["form:" + id] = v;
+  const l = tplList().filter(t => t.name !== name); l.push({ name, vals, at: Date.now() }); tplSave(l); renderTpl();
+  log("✓ Đã lưu mẫu " + name + ": " + Object.keys(vals).filter(k => !k.startsWith("form:")).length + " mục + " + Object.keys(forms).filter(k => forms[k]).length + " form");
+};
+$("#cpgo").onclick = async () => {
+  const vals = cpValues(), fids = cpForms(), targets = $$("#cptg input:checked");
+  if (!Object.keys(vals).length && !fids.length) return toast("Chọn ít nhất 1 mục");
+  if (!targets.length) return toast("Chọn nick nhận");
+  if (!confirm(`Ghi ${Object.keys(vals).length} mục${fids.length ? " + " + fids.length + " form" : ""} vào ${targets.length} nick?`)) return;
+  $("#cpgo").disabled = true; const res = [];
+  const log = x => $("#cpres").textContent = res.join("\n") + "\n" + x;
+  const forms = await captureForms(fids, log);
+  for (const c of targets) {   // lần lượt từng nick, từng form: không dồn lệnh vào game cùng lúc
+    const s = servers.find(x => x.id === c.dataset.v), t = +c.dataset.t;
+    const name = (servers.length > 1 ? s.name + " · " : "") + (t + 1) + ". " + ((s.st.tabs.find(x => x.i === t) || {}).nick || "");
+    const part = [];
+    if (Object.keys(vals).length) {
+      log("… " + name);
+      try { const r = await api(s, "/api/cfg", { body: { tab: t, data: JSON.stringify(vals) } }); part.push(...(r.msgs || [])); }
+      catch (e) { part.push("✗ " + e.message); }
+    }
+    for (const [id, snap] of Object.entries(forms)) {
+      if (!snap) continue;
+      log("… " + name + " · form " + id);
+      try { await applyForm(s, t, id, snap); part.push("form " + id + " ✓"); } catch (e) { part.push("form " + id + " ✗ " + e.message); }
+    }
+    res.push((part.some(x => x.includes("✗")) ? "⚠ " : "✓ ") + name + ": " + part.join(" · "));
+  }
+  $("#cpres").textContent = res.join("\n"); $("#cpgo").disabled = false;
+  toast(res.filter(x => x.startsWith("✓")).length + "/" + res.length + " nick xong hết", 4000);
+};
+function renderTpl() {
+  const l = tplList(), box = $("#stpl"); if (!box) return;
+  box.innerHTML = l.length ? l.map((t, i) => { const ks = Object.keys(t.vals), nf = ks.filter(k => k.startsWith("form:")).length;
+    return `<div class="tg"><span class="grow">📁 <b>${esc(t.name)}</b> <small style="color:var(--tx2)">${ks.length - nf} mục${nf ? " + " + nf + " form" : ""}</small></span><button class="sbtn" data-ta="${i}">Áp cho nick…</button><button class="sbtn r" data-td="${i}">✕</button></div>`; }).join("")
+    : '<div class="hint">Chưa có mẫu. Bấm "Chép sang nick khác…" → chọn mục / form → "Lưu thành mẫu".</div>';
+  box.querySelectorAll("[data-ta]").forEach(b => b.onclick = () => openCopy(l[+b.dataset.ta]));
+  box.querySelectorAll("[data-td]").forEach(b => b.onclick = () => { if (confirm("Xoá mẫu " + l[+b.dataset.td].name + "?")) { l.splice(+b.dataset.td, 1); tplSave(l); renderTpl(); } });
 }
 
 // ═════════ lệnh ═════════
@@ -933,8 +1206,8 @@ $("#anotif").onclick = () => { if ("Notification" in window) Notification.reques
 let aTab = "al";
 $$("#aseg button").forEach(b => b.onclick = () => {
   aTab = b.dataset.a; $$("#aseg button").forEach(x => x.classList.toggle("on", x === b));
-  ["al", "sh", "lg"].forEach(k => $("#a-" + k).hidden = k !== aTab);
-  if (aTab === "sh") loadShots(); if (aTab === "lg") loadLog();
+  ["bo", "al", "sh", "lg"].forEach(k => $("#a-" + k).hidden = k !== aTab);
+  if (aTab === "sh") loadShots(); if (aTab === "lg") loadLog(); if (aTab === "bo") loadBoss();
 });
 $("#ashots").onclick = loadShots;
 async function loadShots() {
@@ -1023,7 +1296,7 @@ setInterval(() => {
   await loadRegistry(false);
   if (!curId && servers[0]) curId = servers[0].id;
   await Promise.all(servers.map(pollState));
-  renderAll(); feedRestart();
+  renderAll(); feedRestart(); bossSummary().then(renderAll);
   if (!servers.length) openSheet();
 })();
 </script>
