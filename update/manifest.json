@@ -1,6 +1,6 @@
 {
- "version": "v6.10",
- "notes": "Đổi logo (ảnh mới) và tên Nicknsonet -> Nickdoclu; giữ các sửa kích yên/Phụ/chính đã có ở v6.9",
+ "version": "v6.11",
+ "notes": "Đổi logo splash trong game (Nicknsonet -> DOCLU) và logo header; giữ các sửa kích yên/Phụ/chính của v6.10. Lỗi tự vào game/đăng nhập sau cập nhật vẫn đang điều tra.",
  "files": [
   {
    "name": "NsoCommander.exe",
@@ -9,8 +9,8 @@
   },
   {
    "name": "NsoManaged.jar",
-   "sha256": "e424e97486729bb9853ec9133c8913d397a40bf4a53f3b750b580b47814bca70",
-   "size": 6284035
+   "sha256": "6f6bb543421a7e8ac8e2865eaca5b995a6a2295bea5f04d28cacff9c8a955d0a",
+   "size": 6288406
   }
  ]
 }
