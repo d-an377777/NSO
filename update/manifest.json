@@ -1,16 +1,16 @@
 {
- "version": "v6.6",
- "notes": "Trang Boss (sổ săn boss), mẫu cài đặt đầy đủ (PK âm, săn boss, form Buff/PK/Lọc/Đập đồ…), vào lại game sau ~20 giây, nút Reset nick để cài nick mới",
+ "version": "v6.9",
+ "notes": "Kích yên: TA 80%, TL 60% mặc định; nick Phụ đánh TL xuống 60%; nick Chính đang đánh TA/TL thì không chạy sang vị trí báo cho tới khi xong; sửa nhãn Nhóm/Đội (6 nick)",
  "files": [
   {
    "name": "NsoCommander.exe",
-   "sha256": "7243be85dee6a6d7177f2c947020ab22f0f144d1d98a1f25d2364070570a51dd",
-   "size": 1129272
+   "sha256": "910a42b70c4fb4e2ff088aa328ade5e18a0bf8385de38931e1353eb5bda54ce1",
+   "size": 1129308
   },
   {
    "name": "NsoManaged.jar",
-   "sha256": "52b421388715ee2b9e3752d149d9cc509ddb731f32b7506ef67bc8e80911ff4e",
-   "size": 6281662
+   "sha256": "40c1eae9f55c4d436dc7b84a33881765ddaeca14d6a425a8bc506e237710a80e",
+   "size": 6287701
   }
  ]
 }
