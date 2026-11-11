@@ -1,16 +1,16 @@
 {
- "version": "v6.24",
- "notes": "Tele mặc định bước 60px (chỉnh \"tele <px>\").",
+ "version": "v6.33",
+ "notes": "Nút Tele/Spam trên thanh menu: cài tele + spam skill từng nick, tự lưu cùng file cấu hình.",
  "files": [
   {
    "name": "NsoCommander.exe",
-   "sha256": "1faf95bf41f54524831f6c2fc6efd07c415987206e6750fac3597a30073c3533",
-   "size": 1872425
+   "sha256": "a93fd3115fb2e13e4f5dd3770500dc41d390dafc96e6a2374e5df3f5bd7dfcb5",
+   "size": 1877229
   },
   {
    "name": "NsoManaged.jar",
-   "sha256": "9a7b68933dd052bd1b43a4c4b4639cec9dc208dd4a151eca99e724e4209c5652",
-   "size": 6377361
+   "sha256": "c13fad672bcc74cf04baf5d303a6eb891e7a906d37e455a30e6dfc582b67b9bc",
+   "size": 6396323
   }
  ]
 }
