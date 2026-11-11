@@ -1,6 +1,6 @@
 {
- "version": "v6.11",
- "notes": "Đổi logo splash trong game (Nicknsonet -> DOCLU) và logo header; giữ các sửa kích yên/Phụ/chính của v6.10. Lỗi tự vào game/đăng nhập sau cập nhật vẫn đang điều tra.",
+ "version": "v6.12",
+ "notes": "Chính đánh xong TA/TL rồi mới đi; Tele quái; sửa skill hỗ trợ (Taiyoutama...) không cast thừa; tự đổi map up theo cấp quái (domap exp/yen).",
  "files": [
   {
    "name": "NsoCommander.exe",
@@ -9,8 +9,8 @@
   },
   {
    "name": "NsoManaged.jar",
-   "sha256": "6f6bb543421a7e8ac8e2865eaca5b995a6a2295bea5f04d28cacff9c8a955d0a",
-   "size": 6288406
+   "sha256": "36ad5e1896cb93aee4d292c0e6d9d9c46a8e1c88ef00e6180bdf2cbbf3353a53",
+   "size": 6476437
   }
  ]
 }
