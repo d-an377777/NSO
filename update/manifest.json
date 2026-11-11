@@ -1,6 +1,6 @@
 {
- "version": "v6.12",
- "notes": "Chính đánh xong TA/TL rồi mới đi; Tele quái; sửa skill hỗ trợ (Taiyoutama...) không cast thừa; tự đổi map up theo cấp quái (domap exp/yen).",
+ "version": "v6.14",
+ "notes": "Sửa tele quái gây \"Né\" TA/TL: nick Chính (bật TA/TL) không còn né theo vị trí/HP; tele + đánh TA/TL không xung đột.",
  "files": [
   {
    "name": "NsoCommander.exe",
@@ -9,8 +9,8 @@
   },
   {
    "name": "NsoManaged.jar",
-   "sha256": "b25f8237161ab719047723870002b9630907e3010d2645f9f4cdf77b14ad60fe",
-   "size": 6478638
+   "sha256": "de71633044059a4f3031f3931e723a317e2fd4a1a7fd7b89997cd9b9278b96b0",
+   "size": 6479114
   }
  ]
 }
