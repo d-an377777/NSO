@@ -1,6 +1,6 @@
 {
- "version": "v6.14",
- "notes": "Sửa tele quái gây \"Né\" TA/TL: nick Chính (bật TA/TL) không còn né theo vị trí/HP; tele + đánh TA/TL không xung đột.",
+ "version": "v6.24",
+ "notes": "Tele mặc định bước 60px (chỉnh \"tele <px>\").",
  "files": [
   {
    "name": "NsoCommander.exe",
@@ -9,8 +9,8 @@
   },
   {
    "name": "NsoManaged.jar",
-   "sha256": "de71633044059a4f3031f3931e723a317e2fd4a1a7fd7b89997cd9b9278b96b0",
-   "size": 6479114
+   "sha256": "9a7b68933dd052bd1b43a4c4b4639cec9dc208dd4a151eca99e724e4209c5652",
+   "size": 6377361
   }
  ]
 }
