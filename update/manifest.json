@@ -1,16 +1,16 @@
 {
- "version": "v6.33",
- "notes": "Nút Tele/Spam trên thanh menu: cài tele + spam skill từng nick, tự lưu cùng file cấu hình.",
+ "version": "v7.0",
+ "notes": "Chạy ngầm 40 nick: mỗi nick 1 ClassLoader riêng (bỏ giới hạn 6 tab), không vẽ khi ẩn màn hình game, ảnh dùng chung giữa các nick, chọn/điều khiển hàng loạt (1-20, doi2, offline).",
  "files": [
   {
    "name": "NsoCommander.exe",
-   "sha256": "a93fd3115fb2e13e4f5dd3770500dc41d390dafc96e6a2374e5df3f5bd7dfcb5",
-   "size": 1877229
+   "sha256": "efd35e7f43e158fa368368e02861a27fa6a333f8e9ae277fa13f3255866baf09",
+   "size": 1931428
   },
   {
    "name": "NsoManaged.jar",
-   "sha256": "c13fad672bcc74cf04baf5d303a6eb891e7a906d37e455a30e6dfc582b67b9bc",
-   "size": 6396323
+   "sha256": "9ba54ddcae51fcc3ed5ab386c19c0951da0969ed6191dc9de65c4f5fa5a13e48",
+   "size": 1529185
   }
  ]
 }

@@ -79,6 +79,9 @@ nav button.on::before{content:"";position:absolute;top:0;left:30%;right:30%;heig
 .ava.main{background:linear-gradient(135deg,#b45309,#f59e0b);border:0}.ava.buff{background:linear-gradient(135deg,#6d28d9,#a78bfa);border:0}.ava.sub{background:linear-gradient(135deg,#0e7490,#22d3ee);border:0}
 .ngrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:12px}
 .ngrid .card{margin:0}
+.ngrid.compact{grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:8px}
+.ngrid.compact .kv,.ngrid.compact .btns,.ngrid.compact details{display:none}
+.ngrid.compact .card{padding:10px}
 details summary{cursor:pointer;color:var(--fg2);font-size:12.5px;margin-top:8px;list-style:none}
 details summary::before{content:"▸ ";color:var(--fg3)}details[open] summary::before{content:"▾ "}
 .bag{font-size:12.5px;color:var(--fg2);max-height:240px;overflow:auto;margin-top:6px;border:1px solid var(--line);border-radius:10px;padding:4px 8px;background:var(--bg1)}
@@ -248,6 +251,25 @@ details summary::before{content:"▸ ";color:var(--fg3)}details[open] summary::b
       <button class="sm" data-cmd="/ngu">😴 Ngủ/thức màn hình</button>
       <button class="sm" data-cmd="/anh *">📷 Ảnh tất cả nick</button>
       <button class="sm" data-cmd="/mojar">📦 Mở jar + Start</button>
+    </div>
+    <div class="card" id="nbatch" style="padding:10px 12px">
+      <div class="row" style="gap:6px;flex-wrap:nowrap">
+        <input id="nfilter" placeholder="lọc: tên · số · 1-20" autocapitalize="off" style="flex:1;min-width:0">
+        <select id="nshow" style="width:auto"><option value="">Tất cả</option><option value="on">Trong game</option><option value="off">Offline</option><option value="acc">Có acc</option><option value="main">Chính</option><option value="buff">Quạt</option><option value="sub">Phụ</option></select>
+        <button class="sm" id="ncompact" title="Thẻ gọn: chỉ tên, trạng thái, HP/MP">☰ Gọn</button>
+      </div>
+      <div class="row" style="gap:6px;margin-top:8px">
+        <span class="muted" style="font-size:12px">Hàng loạt:</span>
+        <input id="ntarget" value="*" placeholder="* · 1-20 · doi2 · offline · chinh" autocapitalize="off" style="width:150px">
+        <button class="sm" id="nusefilter" title="Lấy các nick đang hiện theo bộ lọc">⇣ theo lọc</button>
+        <button class="sm" data-bt="/vaolai">🔄 Vào lại</button>
+        <button class="sm" data-bt="/vai">🎭 Áp vai trò</button>
+        <button class="sm" data-bt="/veup">🏠 Về up</button>
+        <button class="sm" data-bt="/batauto">▶ Bật auto</button>
+        <button class="sm" data-bt="/tatauto" data-confirm="Tắt auto các nick này?">⏸ Tắt auto</button>
+        <button class="sm" data-bt="/lenh" data-ask="Lệnh game gửi cho các nick (vd: upts · z · gm35):">⌨ Lệnh game</button>
+      </div>
+      <div class="muted" id="ncount" style="font-size:12px;margin-top:6px"></div>
     </div>
     <div class="ngrid" id="nicks"></div>
   </section>
@@ -592,8 +614,46 @@ function renderNick() {
   if (!st) { $("#nicks").innerHTML = s.ok === false ? `<div class="card empty">✗ ${esc(s.err)}<br><span class="muted">${esc(s.url)}</span></div>` : '<div class="skel"></div><div class="skel"></div>'; return; }
   $("#sysline").innerHTML = `<b>${esc(st.tag)}</b><span>${esc(st.version)}</span><span>RAM ${esc(st.ram)}</span><span>CPU ${esc(st.cpu)}</span>${st.sleep ? '<span class="chip">màn hình ngủ</span>' : ""}${st.teamBusy ? '<span class="chip">đội đang chạy việc</span>' : ""}<span>${st.simple ? "chế độ đơn giản" : "chế độ đầy đủ"}</span><span>Telegram: ${esc(st.tg || "tắt")}</span>`;
   const open = new Set($$("#nicks details[open]").map(d => d.dataset.i));
-  $("#nicks").innerHTML = st.tabs.map(t => nickCard(t, open.has(String(t.i)))).join("") || '<div class="card empty">VPS này chưa có nick.</div>';
+  const shown = st.tabs.filter(nickMatch);
+  $("#nicks").classList.toggle("compact", nCompact);
+  $("#ncompact").classList.toggle("on", nCompact);
+  $("#ncount").textContent = `Hiện ${shown.length}/${st.tabs.length} nick · trong game ${st.tabs.filter(t => t.inGame).length}`;
+  $("#nicks").innerHTML = shown.map(t => nickCard(t, open.has(String(t.i)))).join("") || '<div class="card empty">Không có nick khớp bộ lọc.</div>';
 }
+// v7.0: loc + thao tac hang loat cho nhieu nick
+var nCompact = LS.get("ncompact") === "1";
+function rangeSet(q) {
+  const out = new Set();
+  for (const p of q.split(/[\s,;]+/)) { const m = p.match(/^(\d+)(?:-(\d+))?$/); if (!m) return null; const a = +m[1], b = +(m[2] || m[1]); for (let i = Math.min(a, b); i <= Math.max(a, b); i++) out.add(i); }
+  return out;
+}
+function nickMatch(t) {
+  const q = ($("#nfilter").value || "").trim().toLowerCase(), k = $("#nshow").value;
+  if (k === "on" && !t.inGame) return false;
+  if (k === "off" && (t.inGame || !t.nick)) return false;
+  if (k === "acc" && !t.nick) return false;
+  if ((k === "main" || k === "buff" || k === "sub") && t.role !== k) return false;
+  if (!q) return true;
+  const r = rangeSet(q);
+  if (r) return r.has(t.i + 1);
+  return (t.nick || "").toLowerCase().includes(q);
+}
+$("#nfilter").addEventListener("input", () => renderNick());
+$("#nshow").addEventListener("change", () => renderNick());
+$("#ncompact").addEventListener("click", () => { nCompact = !nCompact; LS.set("ncompact", nCompact ? "1" : "0"); renderNick(); });
+$("#nusefilter").addEventListener("click", () => {
+  const st = cur() && cur().st; if (!st) return;
+  const ids = st.tabs.filter(nickMatch).map(t => t.i + 1);
+  $("#ntarget").value = ids.length === st.tabs.length ? "*" : (ids.join(",") || "*");
+});
+document.addEventListener("click", e => {
+  const b = e.target.closest("[data-bt]"); if (!b) return;
+  const tg = ($("#ntarget").value || "*").trim().replace(/\s+/g, ",") || "*";
+  if (b.dataset.confirm && !confirm(b.dataset.confirm + "\nNick: " + tg)) return;
+  let c = b.dataset.bt + " " + tg;
+  if (b.dataset.ask) { const x = prompt(b.dataset.ask); if (!x || !x.trim()) return; c += " " + x.trim(); }
+  cmdOn(cur(), c);
+});
 function nickCard(t, open) {
   const n = t.i + 1, dot = t.inGame ? "g" : t.inWorld ? "y" : "r", b = t.boss;
   const bossLine = b ? `<span>Săn boss</span><span>${b.hunt ? "🐉 " + esc(b.st) : b.want ? "BẬT · chờ thông báo" : "tắt"}${b.ev ? '<br><span class="muted">' + esc(b.ev) + "</span>" : ""}${b.item ? '<br><span class="muted">🎒 ' + esc(b.item) + "</span>" : ""}</span>` : "";
